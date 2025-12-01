@@ -74,7 +74,7 @@ class TimeTools {
             return buildString {
                 if (hours > 0) append("${hours}h")
                 if (minutes > 0L) append("${minutes}m")
-                if (hours == 0L && minutes == 0L) append("<1m") // Handle case for less than 1 minute
+                if (hours == 0L && minutes == 0L) append("<1m") 
             }.trim()
         }
 

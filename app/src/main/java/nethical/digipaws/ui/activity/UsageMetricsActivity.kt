@@ -112,7 +112,7 @@ class UsageMetricsActivity : AppCompatActivity() {
             markerViewReel.visibility = View.GONE
             val screenshotFile = captureScreenshot(binding.linearSharePic)
             if (screenshotFile != null) {
-                // Open the BottomSheet to share the screenshot
+
                 openShareBottomSheet(screenshotFile)
             } else {
                 Toast.makeText(this, "Failed to capture screenshot", Toast.LENGTH_SHORT).show()
@@ -128,7 +128,6 @@ class UsageMetricsActivity : AppCompatActivity() {
         super.onResume()
 
         lifecycleScope.launch {
-            // Get the current date and update UI elements
 
             totalReels = savedPreferencesLoader.getReelsScrolled()
             reelsAttentionSpanData = savedPreferencesLoader.loadUsageHoursAttentionSpanData()
@@ -139,11 +138,6 @@ class UsageMetricsActivity : AppCompatActivity() {
             binding.statsTodayReels.text =
                 getString(R.string.you_scrolled_reels, totalReels.getOrDefault(date, 0))
 
-//            if (totalReels.getOrDefault(date, 0) == 0) {
-//                binding.statsAttentionSpanToday.visibility = View.GONE
-//            } else {
-//                binding.statsAttentionSpanToday.visibility = View.VISIBLE
-//            }
             var average = withContext(Dispatchers.Default) {
                 reelsAttentionSpanData[date]?.let { calculateAverageAttentionSpan(it, date) }
             }
@@ -182,7 +176,7 @@ class UsageMetricsActivity : AppCompatActivity() {
             position = XAxis.XAxisPosition.BOTTOM
             granularity = 1f
             labelCount = 5
-            setDrawGridLines(false) // Disable vertical grid lines
+            setDrawGridLines(false) 
             valueFormatter = IndexAxisValueFormatter(labels)
             textColor = primaryColor
         }
@@ -213,9 +207,9 @@ class UsageMetricsActivity : AppCompatActivity() {
     private suspend fun makeReelCountStatsChart() {
         withContext(Dispatchers.Default) {
             val entries = mutableListOf<Entry>()
-            val labels = mutableListOf<String>() // Store labels for X-axis
+            val labels = mutableListOf<String>() 
 
-            var index = 0f // Keep track of index for the x-axis
+            var index = 0f 
             for ((date, value) in totalReels) {
                 entries.add(Entry(index, value.toFloat()))
                 labels.add(TimeTools.shortenDate(date))
@@ -223,7 +217,7 @@ class UsageMetricsActivity : AppCompatActivity() {
             }
 
             val lineDataSet = LineDataSet(entries, getString(R.string.reel_count))
-            // Switch back to the main thread to update the UI
+
             withContext(Dispatchers.Main) {
                 setupChartUI(
                     binding.reelsStats, labels, lineDataSet
@@ -236,8 +230,8 @@ class UsageMetricsActivity : AppCompatActivity() {
     private suspend fun makeAverageReelAttentionSpanChart() {
         withContext(Dispatchers.Default) {
             val entries = mutableListOf<Entry>()
-            val labels = mutableListOf<String>() // Store labels for X-axis
-            var index = 0f // Keep track of index for the x-axis
+            val labels = mutableListOf<String>() 
+            var index = 0f 
 
             Log.d("datef", reelsAttentionSpanData.toString())
             for ((date, value) in reelsAttentionSpanData) {
@@ -249,7 +243,7 @@ class UsageMetricsActivity : AppCompatActivity() {
             }
 
             val lineDataSet = LineDataSet(entries, getString(R.string.average_attention_span))
-            // Switch back to the main thread to update the UI
+
             withContext(Dispatchers.Main) {
                 setupChartUI(
                     binding.avgAttentionStats, labels, lineDataSet
@@ -269,12 +263,11 @@ class UsageMetricsActivity : AppCompatActivity() {
     }
 
     private fun captureScreenshot(rootView: View): File? {
-        // Create a Bitmap of the root layout based on its actual size
+
         val bitmap = Bitmap.createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         rootView.draw(canvas)
 
-        // Save the resized bitmap to a file in the cache directory
         val file = File(cacheDir, "screenshot_${System.currentTimeMillis()}.png")
         try {
             FileOutputStream(file).use { fos ->
@@ -284,7 +277,7 @@ class UsageMetricsActivity : AppCompatActivity() {
         } catch (e: IOException) {
             e.printStackTrace()
         } finally {
-            // Recycle bitmaps to free memory
+
             bitmap.recycle()
         }
         return null

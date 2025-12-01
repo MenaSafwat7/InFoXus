@@ -119,7 +119,7 @@ class LocationBlockerActivity : AppCompatActivity() {
 
         binding.switchAutoControlFocusMode.setOnCheckedChangeListener { _, isChecked ->
             locationPrefsManager.setAutoControlFocusMode(isChecked)
-            // Refresh AppBlockerService to apply changes
+
             val intent = Intent(AppBlockerService.INTENT_ACTION_REFRESH_APP_BLOCKER)
             sendBroadcast(intent)
         }
@@ -198,12 +198,10 @@ class LocationBlockerActivity : AppCompatActivity() {
             .setView(dialogBinding.root)
             .create()
 
-        // Setup slider
         dialogBinding.sliderRadius.addOnChangeListener { _, value, _ ->
             dialogBinding.tvRadiusValue.text = "${value.toInt()} meters"
         }
 
-        // Get current location button
         dialogBinding.btnGetCurrentLocation.setOnClickListener {
             getCurrentLocation { location ->
                 dialogBinding.etLatitude.setText(location.latitude.toString())
@@ -211,7 +209,6 @@ class LocationBlockerActivity : AppCompatActivity() {
             }
         }
 
-        // Select apps button
         dialogBinding.btnSelectAppsToBlock.setOnClickListener {
             val intent = Intent(this, SelectAppsActivity::class.java)
             intent.putStringArrayListExtra(
@@ -221,12 +218,10 @@ class LocationBlockerActivity : AppCompatActivity() {
             selectAppsLauncher.launch(intent)
         }
 
-        // Cancel button
         dialogBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
 
-        // Save button
         dialogBinding.btnSave.setOnClickListener {
             val name = dialogBinding.etLocationName.text.toString()
             val latStr = dialogBinding.etLatitude.text.toString()
@@ -275,12 +270,12 @@ class LocationBlockerActivity : AppCompatActivity() {
     }
 
     private fun showEditLocationDialog(location: SavedLocation) {
-        // For simplicity, show options to edit or delete
+
         MaterialAlertDialogBuilder(this)
             .setTitle(location.name)
             .setMessage("Lat: ${location.latitude}, Lng: ${location.longitude}\nRadius: ${location.getRadiusText()}\nBlocked apps: ${location.getBlockedAppsCount()}")
             .setPositiveButton("Edit") { _, _ ->
-                // TODO: Implement full edit functionality
+
                 Toast.makeText(this, "Edit functionality coming soon", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Delete") { _, _ ->
@@ -359,7 +354,6 @@ class LocationBlockerActivity : AppCompatActivity() {
         }
     }
 
-    // RecyclerView Adapter
     inner class LocationsAdapter(
         private val onLocationClick: (SavedLocation) -> Unit,
         private val onToggleEnabled: (SavedLocation) -> Unit,

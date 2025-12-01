@@ -16,7 +16,7 @@ import nethical.digipaws.services.GeneralFeaturesService
 class SetupTimedModeFragment : Fragment() {
 
     private var _binding: FragmentSetupTimedModeBinding? = null
-    private val binding get() = _binding!!  // Safe getter for binding
+    private val binding get() = _binding!!  
 
     override fun onCreateView(
         inflater: LayoutInflater,

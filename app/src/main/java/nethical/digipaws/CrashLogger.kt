@@ -18,7 +18,7 @@ class CrashLogger(private val context: Context) : Thread.UncaughtExceptionHandle
         try {
             val timeStamp =
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-            val writer = FileWriter(logFile, true) // Append mode
+            val writer = FileWriter(logFile, true) 
             writer.append("\n--- Crash at $timeStamp ---\n")
             writer.append("Device: ${Build.MANUFACTURER} ${Build.MODEL} (Android ${Build.VERSION.RELEASE})\n")
             val printWriter = PrintWriter(writer)
@@ -29,6 +29,6 @@ class CrashLogger(private val context: Context) : Thread.UncaughtExceptionHandle
             e.printStackTrace()
         }
 
-        defaultHandler?.uncaughtException(thread, throwable) // Let the system handle the crash
+        defaultHandler?.uncaughtException(thread, throwable) 
     }
 }

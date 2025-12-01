@@ -47,7 +47,7 @@ class ShortcutActivity : AppCompatActivity() {
             startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
-            // Fallback to general Accessibility Settings
+
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
     }

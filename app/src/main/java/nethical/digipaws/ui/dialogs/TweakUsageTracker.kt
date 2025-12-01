@@ -21,7 +21,6 @@ class TweakUsageTracker(
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogConfigurationTracker = DialogConfigTrackerBinding.inflate(layoutInflater)
 
-        // Load tracker preferences
         trackerPreferences =
             requireContext().getSharedPreferences("config_tracker", Context.MODE_PRIVATE)
         dialogConfigurationTracker.cbReelCounter.isChecked =
@@ -29,13 +28,11 @@ class TweakUsageTracker(
         dialogConfigurationTracker.cbTimeElapsed.isChecked =
             trackerPreferences.getBoolean("is_time_elapsed", false)
 
-        // Build and display dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setView(dialogConfigurationTracker.root)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.save)) { dialog, _ ->
 
-                // Save updated settings
                 with(trackerPreferences.edit()) {
                     putBoolean(
                         "is_reel_counter",
@@ -45,10 +42,9 @@ class TweakUsageTracker(
                         "is_time_elapsed",
                         dialogConfigurationTracker.cbTimeElapsed.isChecked
                     )
-                    commit() // Apply changes immediately
+                    commit() 
                 }
 
-                // Send broadcast to refresh UsageTrackingService
                 sendRefreshRequest(UsageTrackingService.INTENT_ACTION_REFRESH_USAGE_TRACKER)
                 dialog.dismiss()
             }

@@ -41,7 +41,7 @@ class NotificationTimerManager(private val context: Context) {
         onTickCallback: ((Long) -> Unit)? = null,
         onFinishCallback: (() -> Unit)? = null
     ) {
-        // Cancel any existing timer
+
         countDownTimer?.cancel()
 
         countDownTimer = object : CountDownTimer(totalMillis, 1000) {
@@ -49,30 +49,26 @@ class NotificationTimerManager(private val context: Context) {
                 val displayMillis =
                     if (isCountdown) millisUntilFinished else totalMillis - millisUntilFinished
 
-                // Update notification with current timer value
                 updateTimerNotification(displayMillis)
 
-                // Optional tick callback
                 onTickCallback?.invoke(displayMillis)
             }
 
             override fun onFinish() {
-                // Remove the notification when timer completes
+
                 notificationManager.cancel(NOTIFICATION_ID)
 
-                // Optional finish callback
                 onFinishCallback?.invoke()
             }
         }.start()
     }
 
     private fun updateTimerNotification(remainingMillis: Long) {
-        // Convert milliseconds to hours, minutes, seconds
+
         val hours = remainingMillis / 3600000
         val minutes = (remainingMillis % 3600000) / 60000
         val seconds = (remainingMillis % 60000) / 1000
 
-        // Format time display
         val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -80,7 +76,7 @@ class NotificationTimerManager(private val context: Context) {
             .setContentText(timeString)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setOngoing(true)  // Makes notification persistent
+            .setOngoing(true)  
             .setCategory(NotificationCompat.CATEGORY_PROGRESS)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .build()

@@ -105,7 +105,7 @@ class TimedActionActivity : AppCompatActivity() {
         dialogAddToTimedActionBinding.endTime.text = endTime.toString()
 
         dialogAddToTimedActionBinding.picker.setOnTouchListener { v, event ->
-            // Disable ScrollView's touch interception when interacting with the picker
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> dialogAddToTimedActionBinding.scrollview.requestDisallowInterceptTouchEvent(
                     true
@@ -115,7 +115,7 @@ class TimedActionActivity : AppCompatActivity() {
                     false
                 )
             }
-            v.onTouchEvent(event) // Pass the event to the picker
+            v.onTouchEvent(event) 
         }
         dialogAddToTimedActionBinding.picker.setOnTimeChangeListener(object :
             TimeRangePicker.OnTimeChangeListener {

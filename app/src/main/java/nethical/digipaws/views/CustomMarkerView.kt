@@ -17,9 +17,9 @@ class CustomMarkerView(context: Context, layoutResource: Int) :
     override fun refreshContent(e: Entry?, highlight: Highlight?) {
         e?.y?.let { value ->
             tvContent.text = if (showDecimal) {
-                "%.2f".format(value)  // Efficient decimal formatting
+                "%.2f".format(value)  
             } else {
-                value.toInt().toString()  // Convert to integer for non-decimal
+                value.toInt().toString()  
             }
         }
 
@@ -27,7 +27,7 @@ class CustomMarkerView(context: Context, layoutResource: Int) :
     }
 
     override fun getOffset(): MPPointF {
-        // Adjust marker position
+
         return MPPointF(-(width / 2).toFloat(), -height.toFloat())
     }
 }

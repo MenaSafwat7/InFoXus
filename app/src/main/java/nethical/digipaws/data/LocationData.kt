@@ -8,11 +8,11 @@ data class SavedLocation(
     val name: String,
     val latitude: Double,
     val longitude: Double,
-    val radius: Float, // in meters (50-500m recommended)
-    val blockedApps: Set<String> = emptySet(), // Package names to block at this location
-    val isActiveZone: Boolean = true, // true = blocking active here, false = blocking disabled here
+    val radius: Float, 
+    val blockedApps: Set<String> = emptySet(), 
+    val isActiveZone: Boolean = true, 
     val enabled: Boolean = true,
-    val enableFocusModeInZone: Boolean = false, // Auto-enable focus mode when in this zone
+    val enableFocusModeInZone: Boolean = false, 
     val createdAt: Long = System.currentTimeMillis()
 ) {
 
@@ -37,10 +37,10 @@ data class LocationBlockerConfig(
     val isEnabled: Boolean = false,
     val globalMode: LocationMode = LocationMode.BLOCK_IN_ZONES,
     val locations: List<SavedLocation> = emptyList(),
-    val useHighAccuracy: Boolean = true, // GPS vs Network location
+    val useHighAccuracy: Boolean = true, 
     val geofencingEnabled: Boolean = true,
-    val updateIntervalMinutes: Int = 5, // How often to check location if not using geofencing
-    val autoControlFocusMode: Boolean = false // Automatically enable/disable focus mode based on location
+    val updateIntervalMinutes: Int = 5, 
+    val autoControlFocusMode: Boolean = false 
 ) {
 
     fun getEnabledLocations(): List<SavedLocation> {
@@ -73,7 +73,7 @@ data class LocationState(
     val currentLatLng: LatLng?,
     val insideZones: List<SavedLocation> = emptyList(),
     val lastUpdateTime: Long = System.currentTimeMillis(),
-    val accuracy: Float = 0f // in meters
+    val accuracy: Float = 0f 
 ) {
 
     fun isInsideAnyZone(): Boolean = insideZones.isNotEmpty()
@@ -95,7 +95,7 @@ data class GeofenceEvent(
 )
 
 enum class GeofenceTransition {
-    ENTER,  // Entered the geofence
-    EXIT,   // Exited the geofence
-    DWELL   // Stayed inside geofence for a period
+    ENTER,  
+    EXIT,   
+    DWELL   
 }

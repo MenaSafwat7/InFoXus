@@ -52,11 +52,9 @@ class AppUsageBreakdown(private val stat: AllAppsUsageFragment.Stat) : Fragment(
             description.isEnabled = false
             legend.isEnabled = true
 
-            // Enable touch gestures
             setTouchEnabled(true)
             setPinchZoom(true)
 
-            // Configure X axis
             xAxis.apply {
                 position = XAxis.XAxisPosition.BOTTOM
                 granularity = 1f
@@ -64,35 +62,30 @@ class AppUsageBreakdown(private val stat: AllAppsUsageFragment.Stat) : Fragment(
                 valueFormatter = HourAxisFormatter()
             }
 
-            // Configure Y axis
             axisLeft.apply {
                 valueFormatter = MinutesAxisFormatter()
                 axisMinimum = 0f
             }
             axisRight.isEnabled = false
 
-            // Animate chart
             animateX(1000)
         }
     }
 
     private fun plotUsageData() {
-        // Initialize 24-hour time slots with zero usage
+
         val hourlyUsage = MutableList(24) { 0L }
 
-        // Process each start time
         stat.startTimes.forEach { startTime ->
             val hour = startTime.hour
-            // Convert milliseconds to minutes and add to the appropriate hour slot
+
             hourlyUsage[hour] = hourlyUsage[hour] + (stat.totalTime / (1000 * 60))
         }
 
-        // Create entries from hourly usage data
         val entries = hourlyUsage.mapIndexed { hour, minutes ->
             Entry(hour.toFloat(), minutes.toFloat())
         }
 
-        // Create and configure the dataset
         val dataSet = LineDataSet(entries, "Usage (minutes)")
 
         setupChartUI(binding.lineChart,dataSet)
@@ -125,7 +118,7 @@ class AppUsageBreakdown(private val stat: AllAppsUsageFragment.Stat) : Fragment(
             position = XAxis.XAxisPosition.BOTTOM
             granularity = 1f
             labelCount = 5
-            setDrawGridLines(false) // Disable vertical grid lines
+            setDrawGridLines(false) 
             textColor = primaryColor
         }
 

@@ -16,7 +16,7 @@ class StartFocusMode(savedPreferencesLoader: SavedPreferencesLoader,private val 
 ) {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Inflate the custom dialog layout
+
         val dialogFocusModeBinding = DialogFocusModeBinding.inflate(layoutInflater)
         val previousData = savedPreferencesLoader?.getFocusModeData()
         dialogFocusModeBinding.focusModeMinsPicker.setValue(3)
@@ -55,7 +55,7 @@ class StartFocusMode(savedPreferencesLoader: SavedPreferencesLoader,private val 
                 )
                 sendRefreshRequest(AppBlockerService.INTENT_ACTION_REFRESH_FOCUS_MODE)
                 val timer = NotificationTimerManager(requireContext())
-                // TODO: add notification permission check
+
                 timer.startTimer(totalMillis.toLong())
                 onPositiveButtonPressed()
             }

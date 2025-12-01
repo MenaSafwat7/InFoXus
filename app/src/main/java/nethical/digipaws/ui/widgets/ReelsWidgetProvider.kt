@@ -69,53 +69,50 @@ class ReelsWidgetProvider : AppWidgetProvider() {
     ) {
         try {
             val views = RemoteViews(context.packageName, R.layout.widget_reels_count).apply {
-                // Update reels count
+
                 val preferencesLoader = SavedPreferencesLoader(context)
                 val currentDate = TimeTools.getCurrentDate()
                 val yesterdayDate = TimeTools.getPreviousDate()
 
-                val softGreen = Color.parseColor("#4CAF50") // Muted green
-                val softRed = Color.parseColor("#F44336")  // Muted red
+                val softGreen = Color.parseColor("#4CAF50") 
+                val softRed = Color.parseColor("#F44336")  
 
                 val reelsCountToday = preferencesLoader.getReelsScrolled()[currentDate] ?: 0
-//                val reelsCountToday = 13500
+
                 val reelsCountYesterday = preferencesLoader.getReelsScrolled()[yesterdayDate] ?: 0
 
-                // Calculate the change percentage
                 val changePercentage = if (reelsCountYesterday > 0) {
                     ((reelsCountToday - reelsCountYesterday).toDouble() / reelsCountYesterday) * 100
                 } else {
-                    0.0 // No change percentage if no reels were scrolled yesterday
+                    0.0 
                 }
 
-                // Format and set the change percentage for display
                 when {
-                    changePercentage < 0 -> { // Reduction in usage
+                    changePercentage < 0 -> { 
                         setTextViewText(
                             R.id.widget_reels_cout_percentage,
-                            "-%.1f%%".format(-changePercentage) // Remove negative sign when displaying reduction
+                            "-%.1f%%".format(-changePercentage) 
                         )
-//                        setTextColor(R.id.widget_reels_cout_percentage, softGreen) // Green for reduction
+
                     }
-                    changePercentage > 0 -> { // Increase in usage
+                    changePercentage > 0 -> { 
                         setTextViewText(
                             R.id.widget_reels_cout_percentage,
                             "+%.1f%%".format(changePercentage)
                         )
-//                        setTextColor(R.id.widget_reels_cout_percentage, softRed) // Red for increase
+
                     }
-                    else -> { // No change
+                    else -> { 
                         setTextViewText(
                             R.id.widget_reels_cout_percentage,
-                            "0.0%" // Display no change
+                            "0.0%" 
                         )
-//                        setTextColor(R.id.widget_reels_cout_percentage, Color.WHITE) // Neutral color for no change
+
                     }
                 }
 
                 setTextViewText(R.id.widget_reels_cout, formatNumber(reelsCountToday.toLong()))
 
-                // Set up refresh button
                 val refreshIntent = createRefreshIntent(context, widgetId)
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,

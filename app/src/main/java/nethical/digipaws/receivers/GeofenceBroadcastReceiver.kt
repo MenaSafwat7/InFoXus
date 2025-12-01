@@ -31,10 +31,8 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
-        // Get the transition type
         val geofenceTransition = geofencingEvent.geofenceTransition
 
-        // Get the geofences that were triggered
         val triggeringGeofences = geofencingEvent.triggeringGeofences
 
         if (triggeringGeofences == null || triggeringGeofences.isEmpty()) {
@@ -42,7 +40,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             return
         }
 
-        // Process each triggered geofence
         for (geofence in triggeringGeofences) {
             handleGeofenceTransition(context, geofence.requestId, geofenceTransition)
         }
@@ -80,17 +77,14 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             }
         }
 
-        // Create geofence event
         val event = GeofenceEvent(
             locationId = locationId,
             locationName = location.name,
             transitionType = transition
         )
 
-        // Notify AppBlockerService about the transition
         notifyAppBlockerService(context, event)
 
-        // Store last geofence event for status tracking
         storeLastEvent(context, event)
     }
 
@@ -103,7 +97,6 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
         }
         context.sendBroadcast(intent)
 
-        // Also send refresh request to AppBlockerService
         context.sendBroadcast(Intent(AppBlockerService.INTENT_ACTION_REFRESH_APP_BLOCKER))
     }
 

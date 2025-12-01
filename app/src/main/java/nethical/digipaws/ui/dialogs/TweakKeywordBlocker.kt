@@ -68,26 +68,23 @@ class TweakKeywordBlocker(savedPreferencesLoader: SavedPreferencesLoader) :
             )
         }
 
-        // Initialize SharedPreferences
         sharedPreferences =
             requireContext().getSharedPreferences("keyword_blocker_configs", Context.MODE_PRIVATE)
 
-        // Load current preferences into dialog
         dialogManageKeywordBlocker.cbSearchTextField.isChecked =
             sharedPreferences.getBoolean("search_all_text_fields", false)
         dialogManageKeywordBlocker.redirectUrl.setText(
             sharedPreferences.getString(
                 "redirect_url",
-                "https://www.youtube.com/watch?v=x31tDT-4fQw&t=1s"
+                "https://www.google.com"
             )
         )
 
-        // Build and show the dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setView(dialogManageKeywordBlocker.root)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.ok)) { _, _ ->
-                // Save changes to SharedPreferences
+
                 with(sharedPreferences.edit()) {
                     putBoolean(
                         "search_all_text_fields",
@@ -97,14 +94,13 @@ class TweakKeywordBlocker(savedPreferencesLoader: SavedPreferencesLoader) :
                         "redirect_url",
                         dialogManageKeywordBlocker.redirectUrl.text.toString()
                     )
-                    commit() // Save changes immediately
+                    commit() 
                 }
 
-                // Send broadcast to refresh the KeywordBlockerService
                 sendRefreshRequest(KeywordBlockerService.INTENT_ACTION_REFRESH_CONFIG)
             }
             .setNegativeButton(getString(R.string.close)) { _, _ ->
-                // Do nothing on cancel
+
             }
             .create()
     }

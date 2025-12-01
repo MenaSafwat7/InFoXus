@@ -105,7 +105,7 @@ class KeywordBlockerService : BaseBlockingService() {
 
         keywordBlocker.isSearchAllTextFields = sp.getBoolean("search_all_text_fields", false)
         keywordBlocker.redirectUrl =
-            sp.getString("redirect_url", "https://www.youtube.com/watch?v=x31tDT-4fQw&t=1s")
+            sp.getString("redirect_url", "https://www.google.com")
                 .toString()
 
         if (keywordBlocker.isSearchAllTextFields) {

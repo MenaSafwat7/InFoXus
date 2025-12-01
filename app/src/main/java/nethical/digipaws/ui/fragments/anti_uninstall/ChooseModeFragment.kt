@@ -14,7 +14,7 @@ class ChooseModeFragment : Fragment() {
         const val FRAGMENT_ID = "choose_anti_uninstall_mode"
     }
     private var _binding: FragmentChoseAntiUninstallModeBinding? = null
-    private val binding get() = _binding!!  // Safe getter for binding
+    private val binding get() = _binding!!  
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,7 @@ class ChooseModeFragment : Fragment() {
                         .replace(
                             R.id.fragment_holder,
                             SetupPasswordModeFragment()
-                        ) // Replace with FragmentB
+                        ) 
                         .addToBackStack(null)
                         .commit()
                 }
@@ -44,7 +44,7 @@ class ChooseModeFragment : Fragment() {
                         .replace(
                             R.id.fragment_holder,
                             SetupTimedModeFragment()
-                        ) // Replace with FragmentB
+                        ) 
                         .addToBackStack(null)
                         .commit()
                 }

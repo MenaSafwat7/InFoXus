@@ -51,6 +51,7 @@ import nethical.digipaws.ui.fragments.anti_uninstall.ChooseModeFragment
 import nethical.digipaws.ui.fragments.installation.WelcomeFragment
 import nethical.digipaws.utils.SavedPreferencesLoader
 import nethical.digipaws.utils.LocationPreferencesManager
+import nethical.digipaws.utils.ServiceStateManager
 import nethical.digipaws.ui.activity.LocationBlockerActivity
 import java.util.Calendar
 
@@ -68,22 +69,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var addAutoFocusHoursActivity: ActivityResultLauncher<Intent>
 
     private val savedPreferencesLoader = SavedPreferencesLoader(this)
+    private val serviceStateManager: ServiceStateManager by lazy { ServiceStateManager(this) }
     private lateinit var options: ActivityOptionsCompat
     private var isDeviceAdminOn = false
     private var isAntiUninstallOn = false
     private var doesAntiUninstallBlockView = false
 
     private var isGeneralSettingsOn = false
+    private var hasShownServiceLossDialogThisSession = false
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                // Permission granted, show notifications
+
                 Toast.makeText(this, "Notification permission granted", Toast.LENGTH_SHORT).show()
 
-//                makeStartFocusModeDialog()
             } else {
-                // Permission denied
+
                 Toast.makeText(this, "Notification permission denied", Toast.LENGTH_SHORT).show()
 
             }
@@ -109,6 +111,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, FragmentActivity::class.java)
             intent.putExtra("fragment", WelcomeFragment.FRAGMENT_ID)
             startActivity(intent, options.toBundle())
+        } else {
+
+            checkServiceStateLossAfterUpdate()
         }
     }
 
@@ -118,6 +123,79 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         checkPermissions()
+
+        checkServiceStateLossAfterUpdate()
+    }
+
+    private fun checkServiceStateLossAfterUpdate() {
+
+        if (hasShownServiceLossDialogThisSession) {
+            return
+        }
+
+        lifecycleScope.launch {
+            val serviceLoss = withContext(Dispatchers.IO) {
+                serviceStateManager.detectServiceStateLoss()
+            }
+
+            if (serviceLoss.hasLoss && serviceLoss.lostServices.isNotEmpty()) {
+                hasShownServiceLossDialogThisSession = true
+                withContext(Dispatchers.Main) {
+                    showServiceStateLossDialog(serviceLoss.lostServices)
+                }
+            }
+        }
+    }
+
+    private fun showServiceStateLossDialog(lostServices: List<String>) {
+        val servicesList = lostServices.joinToString("\n• ", "• ")
+        val hasDeviceAdmin = lostServices.contains("Device Admin")
+        val hasAccessibilityServices = lostServices.any { it != "Device Admin" }
+
+        val message = """
+            ⚠️ Critical Security Alert ⚠️
+
+            The following services have been disabled:
+
+            $servicesList
+
+            This typically happens after reinstalling or updating the app. This is a security issue! Without these services enabled, you may be able to uninstall the app, which could compromise your protection.
+
+            Please re-enable these services immediately to restore full protection.
+        """.trimIndent()
+
+        val dialogBuilder = MaterialAlertDialogBuilder(this)
+            .setTitle("⚠️ Services Disabled")
+            .setMessage(message)
+            .setCancelable(false)
+
+        if (hasAccessibilityServices) {
+            dialogBuilder.setPositiveButton("Re-enable Services") { _, _ ->
+
+                val serviceToOpen = if (lostServices.contains("App Blocker")) {
+                    AppBlockerService::class.java
+                } else {
+                    GeneralFeaturesService::class.java
+                }
+                openAccessibilityServiceScreen(serviceToOpen)
+            }
+        }
+
+        if (hasDeviceAdmin) {
+            val buttonText = if (hasAccessibilityServices) "Enable Device Admin" else "Enable Device Admin"
+            dialogBuilder.setNeutralButton(buttonText) { _, _ ->
+                makeDeviceAdminPermissionDialog()
+            }
+        }
+
+        if (hasAccessibilityServices && !hasDeviceAdmin) {
+            dialogBuilder.setNeutralButton("Open Settings") { _, _ ->
+
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            }
+        }
+
+        dialogBuilder.show()
     }
 
     private fun setupActivityLaunchers() {
@@ -164,7 +242,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        // click listeners for configuration options
+
         binding.selectPinnedApps.setOnClickListener {
             val intent = Intent(this, SelectAppsActivity::class.java)
             intent.putStringArrayListExtra(
@@ -236,7 +314,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        // listeners for turn on/ off buttons
         binding.antiUninstallCardChip.setOnClickListener {
             if (!isDeviceAdminOn) {
                 makeDeviceAdminPermissionDialog()
@@ -269,12 +346,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         }
 
-        // Contact Us buttons
         binding.btnContactLinkedin.setOnClickListener {
-            openUrl("https://www.linkedin.com/in/mena-safwat-98454a246/")
+            openUrl("https://www.linkedin.com")
         }
         binding.btnContactGithub.setOnClickListener {
-            openUrl("https://github.com/MenaSafwat7")
+            openUrl("https://github.com")
         }
         binding.btnContactWhatsapp.setOnClickListener {
             openWhatsApp("+201274707196")
@@ -292,21 +368,21 @@ class MainActivity : AppCompatActivity() {
                 getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
             val componentName = ComponentName(applicationContext, AdminReceiver::class.java)
 
-            // Check if Device Admin is active
             isDeviceAdminOn = devicePolicyManager.isAdminActive(componentName)
+
+            serviceStateManager.saveDeviceAdminState(isDeviceAdminOn)
 
             val antiUninstallInfo = getSharedPreferences("anti_uninstall", Context.MODE_PRIVATE)
             isAntiUninstallOn = antiUninstallInfo.getBoolean("is_anti_uninstall_on", false)
             doesAntiUninstallBlockView =
                 antiUninstallInfo.getBoolean("is_configuring_blocked", false)
 
-            // Check location blocker status
             val locationPrefsManager = LocationPreferencesManager(this@MainActivity)
             val locationConfig = locationPrefsManager.getConfig()
             val isLocationBlockerEnabled = locationConfig.isEnabled && locationConfig.locations.isNotEmpty()
 
             withContext(Dispatchers.Main) {
-                // App Blocker
+
                 updateChip(isAppBlockerOn, binding.appBlockerStatusChip, binding.appBlockerWarning)
                 binding.apply {
                     selectBlockedApps.isEnabled = isAppBlockerOn
@@ -314,7 +390,6 @@ class MainActivity : AppCompatActivity() {
                     appBlockerSelectCheatHours.isEnabled = isAppBlockerOn
                 }
 
-                // General Settings
                 updateChip(
                     isAppBlockerOn,
                     binding.focusModeStatusChip,
@@ -326,7 +401,6 @@ class MainActivity : AppCompatActivity() {
                     autoFocus.isEnabled = isAppBlockerOn
                 }
 
-                // Location Blocker settings
                 updateChip(
                     isLocationBlockerEnabled,
                     binding.locationBlockerStatusChip,
@@ -334,10 +408,8 @@ class MainActivity : AppCompatActivity() {
                 )
                 binding.btnOpenLocationBlocker.isEnabled = !(doesAntiUninstallBlockView && isAntiUninstallOn)
 
-                // Anti-Uninstall settings
                 binding.btnUnlockAntiUninstall.isEnabled = isAntiUninstallOn
 
-                // Update Anti-Uninstall warning
                 if (!isDeviceAdminOn) {
                     binding.antiUninstallWarning.text =
                         getString(R.string.please_enable_device_admin)
@@ -345,7 +417,6 @@ class MainActivity : AppCompatActivity() {
                     binding.antiUninstallWarning.text = getString(R.string.warning_general_settings)
                 }
 
-                // Handle anti-uninstall UI changes
                 if (isDeviceAdminOn && isGeneralSettingsOn) {
                     updateChip(true, binding.antiUninstallCardChip, binding.antiUninstallWarning)
                     binding.antiUninstallCardChip.isEnabled = !isAntiUninstallOn
@@ -359,9 +430,9 @@ class MainActivity : AppCompatActivity() {
                         selectBlockedApps.isEnabled = false
                         appBlockerSelectCheatHours.isEnabled = false
                         startFocusMode.isEnabled = false
-                        autoFocus.isEnabled = false  // Enhanced anti-uninstall: block auto focus mode toggle
-                        selectFocusBlockedApps.isEnabled = false  // Enhanced anti-uninstall: block focus mode config
-                        btnOpenLocationBlocker.isEnabled = false  // Enhanced anti-uninstall: block location blocker config
+                        autoFocus.isEnabled = false  
+                        selectFocusBlockedApps.isEnabled = false  
+                        btnOpenLocationBlocker.isEnabled = false  
                     }
                 }
                 if (isAppBlockerOn) {
@@ -371,6 +442,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
+
+            serviceStateManager.saveServiceStates()
         }
     }
 
@@ -454,7 +527,7 @@ class MainActivity : AppCompatActivity() {
             openAccessibilityServiceScreen(cls)
             dialog.dismiss()
         }
-        // Quick Setup Guide removed - hide the guide button
+
         dialogAccessibilityServiceInfoBinding.btnGuide.visibility = View.GONE
     }
 
@@ -522,7 +595,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         } catch (e: Exception) {
             e.printStackTrace()
-            // Fallback to general Accessibility Settings
+
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
         }
     }
@@ -538,12 +611,12 @@ class MainActivity : AppCompatActivity() {
                 val parts: List<String> = dateString!!.split("/")
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(
-                    Integer.parseInt(parts[2]),  // Year
-                    Integer.parseInt(parts[0]) - 1,  // Month (0-based)
-                    Integer.parseInt(parts[1]),  // Day
-                    0,  // Hour
-                    0,  // Minute
-                    0   // Second
+                    Integer.parseInt(parts[2]),  
+                    Integer.parseInt(parts[0]) - 1,  
+                    Integer.parseInt(parts[1]),  
+                    0,  
+                    0,  
+                    0   
                 )
                 selectedDate.set(Calendar.MILLISECOND, 0)
 
@@ -640,10 +713,10 @@ class MainActivity : AppCompatActivity() {
 
     data class WarningData(
         val message: String = "You can setup a custom message to appear here!",
-        val timeInterval: Int = 120000, // default cooldown period
+        val timeInterval: Int = 120000, 
         val isDynamicIntervalSettingAllowed: Boolean = false,
         val isProceedDisabled: Boolean = false,
-        val isWarningDialogHidden: Boolean = false, // perform back/home action directly without showing warning screen
+        val isWarningDialogHidden: Boolean = false, 
         val proceedDelayInSecs: Int = 15
     )
 

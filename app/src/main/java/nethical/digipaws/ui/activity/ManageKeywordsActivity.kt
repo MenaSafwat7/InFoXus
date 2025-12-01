@@ -58,7 +58,7 @@ class ManageKeywordsActivity : AppCompatActivity() {
         binding.btnAddKeyword.setOnClickListener { makeAddKeywordDialog() }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                // Show a confirmation dialog
+
                 if (oldSize != savedKeywordsList.size) {
                     showExitDialog()
                 } else {
@@ -74,12 +74,12 @@ class ManageKeywordsActivity : AppCompatActivity() {
             .setMessage(getString(R.string.are_you_sure_you_want_to_discard_all_changes_and_exit))
             .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                 dialog.dismiss()
-                // Allow back press
+
                 finish()
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.dismiss()
-                // Do nothing, stay on the screen
+
             }
             .show()
     }
@@ -87,15 +87,14 @@ class ManageKeywordsActivity : AppCompatActivity() {
         val dialogBinding = DialogAddKeywordBinding.inflate(layoutInflater)
 
         val filter = InputFilter { source, _, _, _, _, _ ->
-            // Allow Unicode letters and digits (but not special characters or spaces)
+
             if (source.contains(" ")) {
-                "" // Reject the input
+                "" 
             } else {
-                source // Accept the input
+                source 
             }
         }
 
-        // Apply the filter
         dialogBinding.keywordInput.filters = arrayOf(filter)
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.add_a_new_keyword))
@@ -106,7 +105,7 @@ class ManageKeywordsActivity : AppCompatActivity() {
                     return@setPositiveButton
                 }
                 if (Patterns.WEB_URL.matcher(keyword).matches()) {
-                    val regex = Regex("^(?:https?://)?(?:www\\.)?([\\w-]+)\\.")
+                    val regex = Regex("^(?:https?://)?(?:www\\.)?([^/]+)")
                     keyword = regex.find(keyword)?.groupValues?.get(1) ?: ""
                     Toast.makeText(
                         this,

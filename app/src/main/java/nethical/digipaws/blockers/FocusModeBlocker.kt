@@ -9,14 +9,12 @@ import java.util.Calendar
 
 class FocusModeBlocker : BaseBlocker() {
 
-    // package-name -> [(start-time, end-time), ...]
     private var autoFocusHours: MutableMap<String, List<Pair<Int, Int>>> = mutableMapOf()
 
     var focusModeData = FocusModeData()
 
     fun doesAppNeedToBeBlocked(packageName: String): FocusModeResult {
 
-        // responsible for checking if manual focus mode is turned on
         if (focusModeData.isTurnedOn) {
             if (focusModeData.endTime < System.currentTimeMillis()) {
                 focusModeData.isTurnedOn = false
@@ -43,7 +41,6 @@ class FocusModeBlocker : BaseBlocker() {
             }
         }
 
-        // check if app is under auto-focus mode
         val endAutoFocus = getEndTimeInMillis(packageName)
         if (endAutoFocus != null) {
             return FocusModeResult(isBlocked = true, focusModeEndTime = endAutoFocus)
@@ -67,7 +64,6 @@ class FocusModeBlocker : BaseBlocker() {
                 (startMinutes > endMinutes && (currentMinutes >= startMinutes || currentMinutes < endMinutes))
             ) {
 
-                // Convert endMinutes to uptimeMillis
                 val diffMinutes = endMinutes - currentMinutes
                 val endTimeMillis = uptimeNow + (diffMinutes * 60 * 1000)
 

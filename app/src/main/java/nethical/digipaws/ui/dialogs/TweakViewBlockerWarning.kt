@@ -26,11 +26,9 @@ class TweakViewBlockerWarning(
         val binding =
             DialogTweakBlockerWarningBinding.inflate(layoutInflater)
 
-        // Configure NumberPicker
         binding.selectMins.minValue = 1
         binding.selectMins.maxValue = 240
 
-        // Show additional checkbox options
         binding.cbBackWithoutWarning.visibility = View.VISIBLE
         binding.cbReelInbox.visibility = View.VISIBLE
 
@@ -56,7 +54,6 @@ class TweakViewBlockerWarning(
             viewsToToggle.forEach { it.animateVisibility(!isChecked) }
         }
 
-        // Load previous data from preferences
         val previousData = savedPreferencesLoader!!.loadViewBlockerWarningInfo()
         var proceedDelay = previousData.proceedDelayInSecs
 
@@ -73,7 +70,6 @@ class TweakViewBlockerWarning(
             Log.d("proceedDelay", "onCreateDialog: $proceedDelay")
         }
 
-        // Load saved preferences
         binding.selectMins.setValue(previousData.timeInterval / 60000)
         binding.warningMsgEdit.setText(previousData.message)
         binding.cbDynamicWarning.isChecked =
@@ -81,7 +77,6 @@ class TweakViewBlockerWarning(
         binding.cbProceedBtn.isChecked = previousData.isProceedDisabled
         binding.cbBackWithoutWarning.isChecked = previousData.isWarningDialogHidden
 
-        // Load additional Reel data
         val addReelData: SharedPreferences =
             requireContext().getSharedPreferences("config_reels", Context.MODE_PRIVATE)
         binding.cbReelInbox.isChecked =
@@ -89,17 +84,15 @@ class TweakViewBlockerWarning(
 
         binding.root.layoutTransition = LayoutTransition().apply {
             enableTransitionType(LayoutTransition.CHANGING)
-            setDuration(300) // Set animation duration in ms
+            setDuration(300) 
         }
 
-        // Build and show the dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.save)) { dialog, _ ->
                 val selectedMinInMs = binding.selectMins.getValue() * 60000
 
-                // Save data using SavedPreferencesLoader
                 savedPreferencesLoader.saveViewBlockerWarningInfo(
                     MainActivity.WarningData(
                         binding.warningMsgEdit.text.toString(),
@@ -111,16 +104,14 @@ class TweakViewBlockerWarning(
                     )
                 )
 
-                // Save Reel data to SharedPreferences
                 with(addReelData.edit()) {
                     putBoolean(
                         "is_reel_inbox",
                         binding.cbReelInbox.isChecked
                     )
-                    commit() // Apply changes immediately
+                    commit() 
                 }
 
-                // Send broadcast to refresh ViewBlockerService
                 sendRefreshRequest(ViewBlockerService.INTENT_ACTION_REFRESH_VIEW_BLOCKER)
                 dialog.dismiss()
             }

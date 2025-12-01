@@ -11,7 +11,7 @@ open class BaseBlockingService : AccessibilityService() {
     }
 
     var lastBackPressTimeStamp: Long =
-        SystemClock.uptimeMillis() // prevents repetitive global actions
+        SystemClock.uptimeMillis() 
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
     }

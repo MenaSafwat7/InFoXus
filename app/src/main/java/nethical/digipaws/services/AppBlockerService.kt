@@ -25,9 +25,9 @@ import nethical.digipaws.data.LocationMode
 class AppBlockerService : BaseBlockingService() {
 
     enum class LocationBlockingDecision {
-        BLOCK,       // Location says to block this app
-        ALLOW,       // Location says to allow this app (overrides focus mode)
-        NO_OPINION   // Location has no opinion, continue with normal blocking logic
+        BLOCK,       
+        ALLOW,       
+        NO_OPINION   
     }
 
     companion object {
@@ -46,8 +46,6 @@ class AppBlockerService : BaseBlockingService() {
     private val focusModeBlocker = FocusModeBlocker()
     private val locationPreferencesManager by lazy { LocationPreferencesManager(this) }
 
-    // responsible to trigger a recheck for what app user is currently using even when no event is received. Used in putting the usage recheck logic into
-    // cooldown for an app and later when the cooldown duration is over, trigger a recheck
     private val handler = Handler(Looper.getMainLooper())
 
     private var updateRunnable: Runnable? = null
@@ -61,26 +59,24 @@ class AppBlockerService : BaseBlockingService() {
         lastPackage = packageName
         Log.d("AppBlockerService", "Switched to app $packageName")
 
-        // Step 1: Check location decision first
         val locationDecision = getLocationBlockingDecision(packageName)
         when (locationDecision) {
             LocationBlockingDecision.BLOCK -> {
-                // Location says block - block immediately
+
                 Toast.makeText(this, "This app is blocked at your current location", Toast.LENGTH_LONG).show()
                 pressHome()
                 return
             }
             LocationBlockingDecision.ALLOW -> {
-                // Location says allow - skip focus mode and app blocker
+
                 Log.d("AppBlockerService", "Location allows $packageName, skipping blocking checks")
                 return
             }
             LocationBlockingDecision.NO_OPINION -> {
-                // Continue with normal blocking logic
+
             }
         }
 
-        // Step 2: Check focus mode (but first check if location allows it)
         if (isFocusModeAllowedByLocation()) {
             val focusModeResult = focusModeBlocker.doesAppNeedToBeBlocked(packageName)
             if (focusModeResult.isBlocked) {
@@ -88,12 +84,10 @@ class AppBlockerService : BaseBlockingService() {
                 return
             }
         } else {
-            // Location-based control is enabled and we're not in a focus mode zone
-            // Skip focus mode check entirely - allow the app
+
             Log.d("AppBlockerService", "Not in focus mode zone, skipping focus mode check for $packageName")
         }
 
-        // Step 3: Check regular app blocker
         handleAppBlockerResult(appBlocker.doesAppNeedToBeBlocked(packageName), packageName)
     }
 
@@ -199,7 +193,7 @@ class AppBlockerService : BaseBlockingService() {
                 }
             } catch (e: Exception) {
                 Log.e("AppBlockerService", e.toString())
-                setUpForcedRefreshChecker(coolPackage, endMillis + 60_000) // recheck after a minute
+                setUpForcedRefreshChecker(coolPackage, endMillis + 60_000) 
             }
         }
 
@@ -218,8 +212,6 @@ class AppBlockerService : BaseBlockingService() {
         val selectedFocusModeApps = savedPreferencesLoader.getFocusModeSelectedApps().toHashSet()
         val focusModeData = savedPreferencesLoader.getFocusModeData()
 
-        // As all apps wil get blocked except the selected ones, add essential packages that need not be blocked
-        // to the list of selected apps
         if (focusModeData.modeType == Constants.FOCUS_MODE_BLOCK_ALL_EX_SELECTED) {
             selectedFocusModeApps.add("com.android.systemui")
             getDefaultLauncherPackageName(packageManager)?.let { selectedFocusModeApps.add(it) }
@@ -234,26 +226,22 @@ class AppBlockerService : BaseBlockingService() {
     private fun isFocusModeAllowedByLocation(): Boolean {
         val config = locationPreferencesManager.getConfig()
 
-        // If auto-control focus mode is disabled, focus mode works everywhere (old behavior)
         if (!config.autoControlFocusMode) {
             return true
         }
 
-        // If location blocking is disabled, focus mode works everywhere
         if (!config.isEnabled) {
             return true
         }
 
-        // Get current location state from SharedPreferences (updated by LocationMonitoringService)
         val locationStatePrefs = getSharedPreferences("location_blocker", Context.MODE_PRIVATE)
         val insideZoneIdsJson = locationStatePrefs.getString("current_inside_zones", null)
 
         if (insideZoneIdsJson.isNullOrEmpty()) {
-            // Not inside any zone - focus mode disabled
+
             return false
         }
 
-        // Parse zone IDs
         val insideZoneIds = try {
             val gson = com.google.gson.Gson()
             val type = object : com.google.gson.reflect.TypeToken<List<String>>() {}.type
@@ -262,7 +250,6 @@ class AppBlockerService : BaseBlockingService() {
             emptyList()
         }
 
-        // Check if any of the zones we're inside has focus mode enabled
         val insideZones = config.locations.filter { it.id in insideZoneIds && it.enabled }
         return insideZones.any { it.enableFocusModeInZone }
     }
@@ -270,34 +257,31 @@ class AppBlockerService : BaseBlockingService() {
     private fun getLocationBlockingDecision(packageName: String): LocationBlockingDecision {
         val config = locationPreferencesManager.getConfig()
 
-        // If location blocking is disabled, return NO_OPINION
         if (!config.isEnabled) {
             return LocationBlockingDecision.NO_OPINION
         }
 
-        // Get current location state from SharedPreferences (updated by LocationMonitoringService)
         val locationStatePrefs = getSharedPreferences("location_blocker", Context.MODE_PRIVATE)
         val insideZoneIdsJson = locationStatePrefs.getString("current_inside_zones", null)
 
         if (insideZoneIdsJson.isNullOrEmpty()) {
-            // Not inside any zone - check global mode
+
             return when (config.globalMode) {
                 LocationMode.ENABLE_IN_ZONES -> {
-                    // Blocking only enabled in zones, we're outside - allow
+
                     LocationBlockingDecision.ALLOW
                 }
                 LocationMode.DISABLE_IN_ZONES -> {
-                    // Blocking disabled in zones, we're outside - continue normal blocking
+
                     LocationBlockingDecision.NO_OPINION
                 }
                 LocationMode.BLOCK_IN_ZONES -> {
-                    // Block specific apps in zones, we're outside - continue normal blocking
+
                     LocationBlockingDecision.NO_OPINION
                 }
             }
         }
 
-        // We're inside one or more zones - parse zone IDs
         val insideZoneIds = try {
             val gson = com.google.gson.Gson()
             val type = object : com.google.gson.reflect.TypeToken<List<String>>() {}.type
@@ -310,22 +294,20 @@ class AppBlockerService : BaseBlockingService() {
 
         when (config.globalMode) {
             LocationMode.BLOCK_IN_ZONES -> {
-                // Check if any zone blocks this app
+
                 val blockingZone = insideZones.find { it.shouldBlockApp(packageName) }
                 if (blockingZone != null) {
                     return LocationBlockingDecision.BLOCK
                 }
-                // Not blocked by any zone - continue normal blocking
+
                 return LocationBlockingDecision.NO_OPINION
             }
             LocationMode.ENABLE_IN_ZONES -> {
-                // Blocking only enabled in zones - we're inside, so block if not explicitly allowed
-                // This mode typically blocks all apps except those in selected list
-                // For now, return NO_OPINION to continue with normal blocking logic
+
                 return LocationBlockingDecision.NO_OPINION
             }
             LocationMode.DISABLE_IN_ZONES -> {
-                // Blocking disabled in zones - we're inside a zone, so allow
+
                 return LocationBlockingDecision.ALLOW
             }
         }

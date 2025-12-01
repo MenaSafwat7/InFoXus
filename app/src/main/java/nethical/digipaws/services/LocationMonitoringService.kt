@@ -51,7 +51,6 @@ class LocationMonitoringService : Service() {
     private var currentLocationState: LocationState? = null
     private var isScreenOn = true
 
-    // Screen state receiver for battery optimization
     private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -73,10 +72,10 @@ class LocationMonitoringService : Service() {
         private const val TAG = "LocationMonitoringService"
         private const val NOTIFICATION_ID = 5001
         private const val CHANNEL_ID = "location_monitoring_channel"
-        private const val LOCATION_UPDATE_INTERVAL = 180000L // 3 minutes (optimized for battery)
-        private const val LOCATION_FASTEST_INTERVAL = 90000L // 1.5 minutes (optimized for battery)
-        private const val FAST_UPDATE_INTERVAL_AFTER_CONNECTIVITY = 30000L // 30 seconds after connectivity restored
-        private const val FAST_UPDATE_DURATION = 300000L // 5 minutes of fast updates
+        private const val LOCATION_UPDATE_INTERVAL = 180000L 
+        private const val LOCATION_FASTEST_INTERVAL = 90000L 
+        private const val FAST_UPDATE_INTERVAL_AFTER_CONNECTIVITY = 30000L 
+        private const val FAST_UPDATE_DURATION = 300000L 
 
         const val ACTION_START_MONITORING = "nethical.digipaws.action.START_LOCATION_MONITORING"
         const val ACTION_STOP_MONITORING = "nethical.digipaws.action.STOP_LOCATION_MONITORING"
@@ -96,14 +95,12 @@ class LocationMonitoringService : Service() {
         geofenceManager = GeofenceManager(this)
         connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        // Register screen state receiver for battery optimization
         val screenFilter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
             addAction(Intent.ACTION_SCREEN_OFF)
         }
         registerReceiver(screenReceiver, screenFilter)
 
-        // Setup network callback for connectivity monitoring (primary mechanism)
         setupNetworkCallback()
 
         createNotificationChannel()
@@ -119,7 +116,7 @@ class LocationMonitoringService : Service() {
                 stopSelf()
             }
             else -> {
-                // Default: start monitoring if location blocking is enabled
+
                 if (locationPrefsManager.isEnabled()) {
                     startLocationMonitoring()
                 } else {
@@ -137,14 +134,12 @@ class LocationMonitoringService : Service() {
         super.onDestroy()
         stopLocationMonitoring()
 
-        // Unregister screen receiver
         try {
             unregisterReceiver(screenReceiver)
         } catch (e: IllegalArgumentException) {
             Log.e(TAG, "Screen receiver already unregistered", e)
         }
 
-        // Unregister network callback
         networkCallback?.let {
             try {
                 connectivityManager?.unregisterNetworkCallback(it)
@@ -159,13 +154,10 @@ class LocationMonitoringService : Service() {
     private fun startLocationMonitoring() {
         Log.d(TAG, "Starting location monitoring")
 
-        // Start as foreground service
         startForeground(NOTIFICATION_ID, createNotification())
 
-        // Rebuild geofences
         geofenceManager.rebuildGeofences()
 
-        // Start location updates
         startLocationUpdates()
     }
 
@@ -175,7 +167,7 @@ class LocationMonitoringService : Service() {
     }
 
     private fun stopLocationUpdates() {
-        // Stop location updates
+
         locationCallback?.let {
             fusedLocationClient.removeLocationUpdates(it)
         }
@@ -196,7 +188,6 @@ class LocationMonitoringService : Service() {
             Priority.PRIORITY_BALANCED_POWER_ACCURACY
         }
 
-        // Use faster interval if connectivity was recently restored
         val updateInterval = if (isFastUpdateActive && 
             (System.currentTimeMillis() - fastUpdateStartTime) < FAST_UPDATE_DURATION) {
             FAST_UPDATE_INTERVAL_AFTER_CONNECTIVITY
@@ -238,21 +229,19 @@ class LocationMonitoringService : Service() {
 
     private fun checkConnectivityAndUpdateLocation() {
         if (!isScreenOn) {
-            // Don't check if screen is off
+
             return
         }
 
         val isConnected = isNetworkAvailable()
         if (isConnected) {
             Log.d(TAG, "Connectivity restored - triggering immediate location update")
-            // Activate fast update mode
+
             isFastUpdateActive = true
             fastUpdateStartTime = System.currentTimeMillis()
 
-            // Request immediate location update
             requestImmediateLocationUpdate()
 
-            // Restart location updates with faster interval
             if (locationCallback != null) {
                 stopLocationUpdates()
                 startLocationUpdates()
@@ -352,12 +341,10 @@ class LocationMonitoringService : Service() {
         val latLng = LatLng(location.latitude, location.longitude)
         val locations = locationPrefsManager.getEnabledLocations()
 
-        // Find which zones we're currently inside
         val insideZones = locations.filter { savedLocation ->
             isInsideGeofence(latLng, savedLocation)
         }
 
-        // Update current location state
         currentLocationState = LocationState(
             currentLatLng = latLng,
             insideZones = insideZones,
@@ -365,13 +352,10 @@ class LocationMonitoringService : Service() {
             accuracy = location.accuracy
         )
 
-        // Store zone information in SharedPreferences for AppBlockerService
         storeCurrentZones(insideZones)
 
-        // Update notification with current status
         updateNotification()
 
-        // Notify AppBlockerService
         sendBroadcast(Intent(AppBlockerService.INTENT_ACTION_REFRESH_APP_BLOCKER))
 
         Log.d(TAG, "Location updated: $latLng, Inside ${insideZones.size} zones, Accuracy: ${location.accuracy}m")
@@ -396,7 +380,7 @@ class LocationMonitoringService : Service() {
     }
 
     private fun calculateDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Float {
-        val earthRadius = 6371000.0 // meters
+        val earthRadius = 6371000.0 
         val dLat = Math.toRadians(lat2 - lat1)
         val dLng = Math.toRadians(lng2 - lng1)
 
@@ -442,7 +426,7 @@ class LocationMonitoringService : Service() {
         }
 
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("DigiPaws Location Monitoring")
+            .setContentTitle("InFoXus Location Monitoring")
             .setContentText(contentText)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentIntent(pendingIntent)

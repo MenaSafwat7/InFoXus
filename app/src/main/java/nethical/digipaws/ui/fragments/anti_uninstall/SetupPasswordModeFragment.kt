@@ -16,7 +16,7 @@ import nethical.digipaws.services.GeneralFeaturesService
 class SetupPasswordModeFragment : Fragment() {
 
     private var _binding: FragmentSetupPasswordModeBinding? = null
-    private val binding get() = _binding!!  // Safe getter for binding
+    private val binding get() = _binding!!  
 
     override fun onCreateView(
         inflater: LayoutInflater,

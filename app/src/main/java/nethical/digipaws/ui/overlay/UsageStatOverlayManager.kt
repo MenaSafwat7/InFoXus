@@ -29,7 +29,6 @@ class UsageStatOverlayManager(private val context: Context) {
         isOverlayVisible = true
         overlayView = binding?.root
 
-        // Set up WindowManager.LayoutParams for the overlay
         val layoutParams = LayoutParams(
             LayoutParams.MATCH_PARENT,
             LayoutParams.MATCH_PARENT,

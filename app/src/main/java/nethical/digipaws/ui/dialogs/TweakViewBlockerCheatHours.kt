@@ -23,11 +23,9 @@ class TweakViewBlockerCheatHours(savedPreferencesLoader: SavedPreferencesLoader)
 
         val dialogAddToCheatHoursBinding = DialogAddTimedActionBinding.inflate(layoutInflater)
 
-        // Hide unused UI elements
         dialogAddToCheatHoursBinding.btnSelectUnblockedApps.visibility = View.GONE
         dialogAddToCheatHoursBinding.cheatHourTitle.visibility = View.GONE
 
-        // Configure time picker
         dialogAddToCheatHoursBinding.picker.hourFormat = TimeRangePicker.HourFormat.FORMAT_24
         fixPickerInterceptBug(
             dialogAddToCheatHoursBinding.scrollview,
@@ -39,7 +37,6 @@ class TweakViewBlockerCheatHours(savedPreferencesLoader: SavedPreferencesLoader)
         val savedEndTimeInMinutes = viewBlockerCheatHours.getInt("view_blocker_end_time", -1)
         val savedStartTimeInMinutes = viewBlockerCheatHours.getInt("view_blocker_start_time", -1)
 
-        // Set saved times if available
         if (savedStartTimeInMinutes != -1 || savedEndTimeInMinutes != -1) {
             dialogAddToCheatHoursBinding.picker.startTimeMinutes = savedStartTimeInMinutes
             dialogAddToCheatHoursBinding.picker.endTimeMinutes = savedEndTimeInMinutes
@@ -54,7 +51,6 @@ class TweakViewBlockerCheatHours(savedPreferencesLoader: SavedPreferencesLoader)
             dialogAddToCheatHoursBinding.endTime.text = getString(R.string.end)
         }
 
-        // Handle time changes
         dialogAddToCheatHoursBinding.picker.setOnTimeChangeListener(object :
             TimeRangePicker.OnTimeChangeListener {
             override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
@@ -72,11 +68,10 @@ class TweakViewBlockerCheatHours(savedPreferencesLoader: SavedPreferencesLoader)
             }
 
             override fun onDurationChange(duration: TimeRangePicker.TimeDuration) {
-                // No action needed
+
             }
         })
 
-        // Show dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setView(dialogAddToCheatHoursBinding.root)
             .setCancelable(false)

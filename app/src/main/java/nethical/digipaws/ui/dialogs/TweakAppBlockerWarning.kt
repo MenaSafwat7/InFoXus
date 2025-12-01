@@ -18,10 +18,9 @@ class TweakAppBlockerWarning(savedPreferencesLoader: SavedPreferencesLoader) : B
 ) {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Inflate the custom dialog layout
+
         val binding = DialogTweakBlockerWarningBinding.inflate(layoutInflater)
 
-        // Set up number picker
         binding.selectMins.minValue = 1
         binding.selectMins.maxValue = 240
 
@@ -48,7 +47,6 @@ class TweakAppBlockerWarning(savedPreferencesLoader: SavedPreferencesLoader) : B
             viewsToToggle.forEach { it.animateVisibility(!isChecked) }
         }
 
-        // Load previous data from preferences
         val previousData = savedPreferencesLoader!!.loadAppBlockerWarningInfo()
         var proceedDelay = previousData.proceedDelayInSecs
 
@@ -75,10 +73,9 @@ class TweakAppBlockerWarning(savedPreferencesLoader: SavedPreferencesLoader) : B
 
         binding.root.layoutTransition = LayoutTransition().apply {
             enableTransitionType(LayoutTransition.CHANGING)
-            setDuration(300) // Set animation duration in ms
+            setDuration(300) 
         }
 
-        // Build and return the dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
             .setPositiveButton(getString(R.string.save)) { dialog, _ ->

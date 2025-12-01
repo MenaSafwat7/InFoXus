@@ -18,14 +18,14 @@ open class BaseDialog(val savedPreferencesLoader: SavedPreferencesLoader? = null
     @SuppressLint("ClickableViewAccessibility")
     fun fixPickerInterceptBug(scrollview: ScrollView, picker: TimeRangePicker) {
         picker.setOnTouchListener { v, event ->
-            // Disable ScrollView's touch interception when interacting with the picker
+
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> scrollview.requestDisallowInterceptTouchEvent(true)
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> scrollview.requestDisallowInterceptTouchEvent(
                     false
                 )
             }
-            v.onTouchEvent(event) // Pass the event to the picker
+            v.onTouchEvent(event) 
         }
     }
 }

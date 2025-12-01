@@ -88,17 +88,16 @@ class ScreentimeWidgetProvider : AppWidgetProvider() {
         try{
             val views = RemoteViews(context.packageName, R.layout.widget_app_stats).apply {
                 setTextViewText(R.id.screentime_widget, formatTime(totalScreentime))
-                // Loop to handle the first 3 items dynamically
+
                 for (i in 0..2) {
                     val item =
-                        list.getOrNull(i) // Safely get the item, returns null if index is out of bounds
+                        list.getOrNull(i) 
                     if (item != null) {
                         setAppUsageText(this, 0, list, R.id.app_1_sm, context)
                         setAppUsageText(this, 1, list, R.id.app_2_sm, context)
                         setAppUsageText(this, 2, list, R.id.app_3_sm, context)
                     }
 
-                    // Set up refresh button
                     val refreshIntent = createRefreshIntent(context, widgetId)
                     val pendingIntent = PendingIntent.getBroadcast(
                         context,
@@ -128,7 +127,7 @@ class ScreentimeWidgetProvider : AppWidgetProvider() {
     }
 
     fun setAppUsageText(remoteViews: RemoteViews,index: Int, list: List<AllAppsUsageFragment.Stat>, textViewId: Int, context: Context) {
-        val item = list.getOrNull(index) // Safely get the item
+        val item = list.getOrNull(index) 
         if (item != null) {
             val usage =  (TimeTools.formatTimeForWidget(item.totalTime))
             val appName = context.packageManager.getApplicationLabel(
@@ -136,7 +135,7 @@ class ScreentimeWidgetProvider : AppWidgetProvider() {
             )
             remoteViews.setTextViewText(textViewId, "$usage : $appName")
         } else {
-            remoteViews.setTextViewText(textViewId, "") // Handle missing items
+            remoteViews.setTextViewText(textViewId, "") 
         }
     }
 

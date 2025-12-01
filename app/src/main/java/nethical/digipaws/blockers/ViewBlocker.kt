@@ -13,7 +13,7 @@ class ViewBlocker : BaseBlocker() {
             try {
                 targetNode = node.findAccessibilityNodeInfosByViewId(id!!)[0]
             } catch (e: Exception) {
-                //	e.printStackTrace();
+
             }
             return targetNode
         }
@@ -106,16 +106,15 @@ class ViewBlocker : BaseBlocker() {
 
         val currentMinutes = TimeTools.convertToMinutesFromMidnight(currentHour, currentMinute)
 
-        // If cheat hours are not set, treat as inactive
         if (cheatMinuteStartTime == null || cheatMinutesEndTIme == null || cheatMinuteStartTime == -1 || cheatMinutesEndTIme == -1) {
             return false
         }
 
         return if (cheatMinuteStartTime!! <= cheatMinutesEndTIme!!) {
-            // Regular case: start time is before or equal to end time
+
             currentMinutes in cheatMinuteStartTime!!..cheatMinutesEndTIme!!
         } else {
-            // Wraparound case: time range spans midnight
+
             currentMinutes in cheatMinuteStartTime!!..1439 || currentMinutes in 0..cheatMinutesEndTIme!!
         }
     }

@@ -51,7 +51,7 @@ class LauncherActivity : AppCompatActivity() {
         val packageChangeIntentFilter = IntentFilter().apply {
             addAction(Intent.ACTION_PACKAGE_ADDED)
             addAction(Intent.ACTION_PACKAGE_REMOVED)
-            addDataScheme("package") // Important for detecting package changes
+            addDataScheme("package") 
         }
         registerReceiver(packageChangeReceiver, packageChangeIntentFilter)
 
@@ -92,7 +92,7 @@ class LauncherActivity : AppCompatActivity() {
                 Toast.makeText(context, "App not found", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
-            e.printStackTrace() // Handle any exceptions
+            e.printStackTrace() 
             Toast.makeText(context, "Error launching app", Toast.LENGTH_SHORT).show()
         }
     }
@@ -115,11 +115,10 @@ class LauncherActivity : AppCompatActivity() {
                 it.packageName != packageName
             }
 
-            // Separate pinned and unpinned apps
             val pinnedApps = allApps.filter { pinnedAppPackages.contains(it.packageName) }
             val unpinnedApps = allApps.filter { !pinnedAppPackages.contains(it.packageName) }.shuffled()
 
-            val sortedApps = pinnedApps + unpinnedApps // Pinned apps first, followed by shuffled unpinned apps
+            val sortedApps = pinnedApps + unpinnedApps 
 
             lifecycleScope.launch(Dispatchers.Main) {
                 adapter.updatePackages(sortedApps)

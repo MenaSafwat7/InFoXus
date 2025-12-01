@@ -25,7 +25,7 @@ class GeofenceManager(private val context: Context) {
         private const val GEOFENCE_EXPIRATION_IN_HOURS = 24L
         private const val GEOFENCE_EXPIRATION_IN_MILLISECONDS = 
             GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000
-        private const val GEOFENCE_LOITERING_DELAY = 30000 // 30 seconds
+        private const val GEOFENCE_LOITERING_DELAY = 30000 
     }
 
     private val geofencePendingIntent: PendingIntent by lazy {
@@ -125,9 +125,9 @@ class GeofenceManager(private val context: Context) {
     }
 
     fun updateGeofence(location: SavedLocation): Task<Void>? {
-        // First remove the old geofence
+
         removeGeofence(location.id)
-        // Then add the new one
+
         return addGeofence(location)
     }
 
@@ -138,10 +138,8 @@ class GeofenceManager(private val context: Context) {
             return null
         }
 
-        // Remove all existing geofences first
         removeAllGeofences()
 
-        // Add new geofences
         return addGeofences(locations)
     }
 
@@ -169,7 +167,7 @@ class GeofenceManager(private val context: Context) {
 
     private fun buildGeofencingRequest(geofences: List<Geofence>): GeofencingRequest {
         return GeofencingRequest.Builder().apply {
-            // Initial trigger: ENTER means trigger immediately if already inside
+
             setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
             addGeofences(geofences)
         }.build()
@@ -188,7 +186,7 @@ class GeofenceManager(private val context: Context) {
 
     fun isGeofencingAvailable(): Boolean {
         return try {
-            // Try to get the geofencing client
+
             geofencingClient != null
         } catch (e: Exception) {
             Log.e(TAG, "Geofencing not available", e)

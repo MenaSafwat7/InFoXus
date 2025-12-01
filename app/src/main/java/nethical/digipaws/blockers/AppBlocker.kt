@@ -8,10 +8,8 @@ import java.util.Calendar
 
 class AppBlocker:BaseBlocker() {
 
-    // package-name -> end-time-in-millis
     private var cooldownAppsList:MutableMap<String,Long> = mutableMapOf()
 
-    // package-name -> [(start-time, end-time), ...]
     private var cheatHours: MutableMap<String, List<Pair<Int, Int>>> = mutableMapOf()
 
     var blockedAppsList = hashSetOf("")
@@ -19,20 +17,18 @@ class AppBlocker:BaseBlocker() {
     fun doesAppNeedToBeBlocked(packageName: String): AppBlockerResult {
 
         if(cooldownAppsList.containsKey(packageName)){
-            // check if app has surpassed the cooldown period
+
             if (cooldownAppsList[packageName]!! < SystemClock.uptimeMillis()){
                 removeCooldownFrom(packageName)
                 return AppBlockerResult(isBlocked = true)
             }
 
-            // app is still under cooldown
             return AppBlockerResult(
                 isBlocked = false,
                 cooldownEndTime = cooldownAppsList[packageName]!!
             )
         }
 
-        // check if app is under cheat-hours
         val endCheatMillis = getEndTimeInMillis(packageName)
         if (endCheatMillis != null) {
             return AppBlockerResult(isBlocked = false, cheatHoursEndTime = endCheatMillis)
@@ -70,12 +66,10 @@ class AppBlocker:BaseBlocker() {
             ) {
                 var dayOffsetMinutes = 0
 
-                // if cheat hours cross midnight and it is still the first day treat the end time as tomorrow
                 if (startMinutes > endMinutes && currentMinutes > endMinutes) {
                     dayOffsetMinutes = 1440
                 }
 
-                // Convert endMinutes to uptimeMillis
                 val diffMinutes = endMinutes + dayOffsetMinutes - currentMinutes
 
                 Log.d("AppBlocker", "$packageName cheat-hour ends after $diffMinutes minutes")

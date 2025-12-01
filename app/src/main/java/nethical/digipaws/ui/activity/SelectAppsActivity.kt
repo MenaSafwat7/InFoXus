@@ -36,13 +36,11 @@ class SelectAppsActivity : AppCompatActivity() {
     private var appItemList: MutableList<AppItem> = mutableListOf()
     @SuppressLint("NotifyDataSetChanged")
 
-    //change selectAll's text from "Select all" to "Clear all" and vice-versa
     private var allAppsSelected = false
     private fun updateSelectAllButton() {
 
         val adapter = binding.appList.adapter as? ApplicationAdapter
 
-        // Check if every app currently in the adapter's list is present in selectedAppList
         allAppsSelected = adapter?.apps?.all { appItem ->
             selectedAppList.contains(appItem.packageName)
         } == true
@@ -100,7 +98,6 @@ class SelectAppsActivity : AppCompatActivity() {
             popupMenu.show()
         }
 
-        //manages the behaviour of the select all button
         binding.selectAll.setOnClickListener {
             val currentListAdapter = binding.appList.adapter as? ApplicationAdapter
             currentListAdapter?.let { adapter ->
@@ -112,7 +109,7 @@ class SelectAppsActivity : AppCompatActivity() {
                         selectedAppList.add(appItem.packageName)
                     }
                 }
-                adapter.notifyDataSetChanged() // To update checkboxes
+                adapter.notifyDataSetChanged() 
             }
             updateSelectAllButton()
         }
@@ -137,7 +134,6 @@ class SelectAppsActivity : AppCompatActivity() {
             val profiles = launcherApps.profiles
             val installedPackages = mutableSetOf<String>()
 
-            // Load installed apps
             for (profile in profiles) {
                 val apps = launcherApps.getActivityList(null, profile)
                     .map { it.applicationInfo }
@@ -151,7 +147,6 @@ class SelectAppsActivity : AppCompatActivity() {
                 }
             }
 
-            // Add uninstalled apps from selectedAppList that aren't already included
             selectedAppList.forEach { packageName ->
                 if (!installedPackages.contains(packageName)) {
                     try {
@@ -293,10 +288,10 @@ class SelectAppsActivity : AppCompatActivity() {
             .setPositiveButton(getString(R.string.add)) { dialog, _ ->
                 val packageName = dialogBinding.keywordInput.text.toString().trim()
                 if (packageName.isNotEmpty()) {
-                    // Check if package already exists in the list
+
                     if (appItemList.none { it.packageName == packageName }) {
                         try {
-                            // Try to get app info if it's installed
+
                             val appInfo = packageManager.getApplicationInfo(packageName, 0)
                             val appItem = AppItem(
                                 packageName,
@@ -305,21 +300,19 @@ class SelectAppsActivity : AppCompatActivity() {
                             )
                             appItemList.add(appItem)
                         } catch (e: Exception) {
-                            // Add as uninstalled package if not found
+
                             appItemList.add(AppItem(packageName))
                         }
 
-                        // Update the adapter with the new sorted list
                         val sortedList = sortSelectedItemsToTop(appItemList)
                         val adapter = binding.appList.adapter as ApplicationAdapter
                         adapter.updateData(sortedList)
 
-                        // Optionally add to selected list
                         selectedAppList.add(packageName)
 
                         Toast.makeText(this, "Added Successfully", Toast.LENGTH_SHORT).show()
                     } else {
-                        // Show a message if package already exists
+
                         Toast.makeText(this, "Package already exists", Toast.LENGTH_SHORT).show()
                     }
                 }

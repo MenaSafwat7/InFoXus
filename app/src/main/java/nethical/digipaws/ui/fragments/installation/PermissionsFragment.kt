@@ -29,7 +29,7 @@ class PermissionsFragment : Fragment() {
     }
 
     private var _binding: FragmentPermissionsBinding? = null
-    private val binding get() = _binding!!  // Safe getter for binding
+    private val binding get() = _binding!!  
 
     private var nGivenPermissions = 0
     private val notificationPermissionLauncher =
@@ -60,7 +60,6 @@ class PermissionsFragment : Fragment() {
                 requireContext().getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
             sharedPreferences.edit().putBoolean("isFirstLaunchComplete", true).apply()
 
-            // Finish setup - no longer navigate to Quick Setup Guide
             requireActivity().finish()
         }
         setPermissionIcon(isBackgroundPermissionGiven(), binding.bgPermIcon)

@@ -43,8 +43,8 @@ class FragmentActivity : AppCompatActivity() {
                 .replace(
                     R.id.fragment_holder,
                     fragment!!
-                ) // Add or replace the fragment in the container
-                .commit() // Commit the transaction
+                ) 
+                .commit() 
         }
     }
 }

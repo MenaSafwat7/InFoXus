@@ -33,12 +33,10 @@ class GeneralFeaturesService : BaseBlockingService() {
 
         val packageName = event?.packageName ?: return
 
-        // Monitor Settings app
         if (packageName == "com.android.settings") {
             checkAndBlockSettings(event)
         }
 
-        // Monitor Package Installer (for uninstall attempts)
         if (packageName == "com.google.android.packageinstaller" || 
             packageName.contains("packageinstaller")) {
             checkAndBlockUninstall(event)
@@ -48,7 +46,6 @@ class GeneralFeaturesService : BaseBlockingService() {
     private fun checkAndBlockSettings(@Suppress("UNUSED_PARAMETER") event: AccessibilityEvent?) {
         val root = rootInActiveWindow ?: return
 
-        // Check for app name in any form
         val appNames = listOf(
             appDisplayName?.lowercase(Locale.getDefault()) ?: "",
             "infoxus",
@@ -57,7 +54,6 @@ class GeneralFeaturesService : BaseBlockingService() {
             packageName
         ).filter { it.isNotEmpty() }
 
-        // Check for dangerous keywords in device admin or app settings context
         val dangerousKeywords = listOf(
             "device admin",
             "device administrator",
@@ -73,12 +69,10 @@ class GeneralFeaturesService : BaseBlockingService() {
         val text = getNodeText(root)
         val lowerText = text.lowercase(Locale.getDefault())
 
-        // Check if app name appears in settings
         val hasAppName = appNames.any { name -> 
             name.isNotEmpty() && lowerText.contains(name)
         }
 
-        // Check for dangerous keywords when in device admin or app info context
         val hasDangerousKeyword = dangerousKeywords.any { keyword ->
             lowerText.contains(keyword)
         } && (lowerText.contains("device") || lowerText.contains("admin") || 
@@ -91,7 +85,6 @@ class GeneralFeaturesService : BaseBlockingService() {
             return
         }
 
-        // Traverse nodes for more thorough checking
         traverseNodesForKeywords(root, appNames, dangerousKeywords)
     }
 
@@ -105,7 +98,6 @@ class GeneralFeaturesService : BaseBlockingService() {
             "digipaws"
         ).filter { it.isNotEmpty() }
 
-        // Check if uninstall dialog mentions our app
         if (text.contains("uninstall") && appNames.any { text.contains(it) }) {
             Log.d(TAG, "Blocking uninstall attempt")
             pressHome()
@@ -118,11 +110,9 @@ class GeneralFeaturesService : BaseBlockingService() {
 
         val textBuilder = StringBuilder()
 
-        // Add node's own text
         node.text?.let { textBuilder.append(it).append(" ") }
         node.contentDescription?.let { textBuilder.append(it).append(" ") }
 
-        // Add children's text
         for (i in 0 until node.childCount) {
             node.getChild(i)?.let { child ->
                 textBuilder.append(getNodeText(child))
@@ -141,18 +131,15 @@ class GeneralFeaturesService : BaseBlockingService() {
             return
         }
 
-        // Check TextView nodes
         if (node.className?.contains("TextView") == true) {
             val nodeText = node.text?.toString()?.lowercase(Locale.getDefault()) ?: ""
             val contentDesc = node.contentDescription?.toString()?.lowercase(Locale.getDefault()) ?: ""
             val combinedText = "$nodeText $contentDesc"
 
-            // Check for app name
             val hasAppName = appNames.any { name -> 
                 name.isNotEmpty() && combinedText.contains(name)
             }
 
-            // Check for dangerous keywords in context of device admin or uninstall
             val hasDangerousContext = dangerousKeywords.any { keyword ->
                 combinedText.contains(keyword)
             } && (combinedText.contains("device") || combinedText.contains("admin") || 
@@ -166,7 +153,6 @@ class GeneralFeaturesService : BaseBlockingService() {
             }
         }
 
-        // Recursively check children
         for (i in 0 until node.childCount) {
             val childNode = node.getChild(i)
             traverseNodesForKeywords(childNode, appNames, dangerousKeywords)
@@ -177,7 +163,6 @@ class GeneralFeaturesService : BaseBlockingService() {
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        // Get app package name and display name
         appPackageName = packageName
         try {
             val pm = packageManager
@@ -186,7 +171,7 @@ class GeneralFeaturesService : BaseBlockingService() {
             Log.d(TAG, "App name: $appDisplayName, Package: $appPackageName")
         } catch (e: Exception) {
             Log.e(TAG, "Error getting app info", e)
-            appDisplayName = "InFoXus" // Fallback
+            appDisplayName = "InFoXus" 
         }
 
         val filter = IntentFilter().apply {
@@ -206,7 +191,7 @@ class GeneralFeaturesService : BaseBlockingService() {
                 when (intent.action) {
                     INTENT_ACTION_REFRESH_ANTI_UNINSTALL -> {
                         setupAntiUninstall()
-                        // Re-fetch app info after refresh
+
                         try {
                             val pm = packageManager
                             val appInfo = pm.getApplicationInfo(packageName, 0)

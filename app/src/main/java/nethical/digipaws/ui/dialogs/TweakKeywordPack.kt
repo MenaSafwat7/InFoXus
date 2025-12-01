@@ -18,30 +18,26 @@ class TweakKeywordPack : BaseDialog() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogManageKeywordPacks = DialogKeywordPackageBinding.inflate(layoutInflater)
 
-        // Initialize SharedPreferences
         sharedPreferences =
             requireContext().getSharedPreferences("keyword_blocker_packs", Context.MODE_PRIVATE)
 
-        // Load current preferences into dialog
         dialogManageKeywordPacks.cbAdultKeywords.isChecked =
             sharedPreferences.getBoolean("adult_blocker", false)
 
-        // Build and show the dialog
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.manage_keyword_blockers))
             .setView(dialogManageKeywordPacks.root)
             .setCancelable(false)
             .setPositiveButton(getString(R.string.save)) { _, _ ->
-                // Save changes to SharedPreferences
+
                 with(sharedPreferences.edit()) {
                     putBoolean(
                         "adult_blocker",
                         dialogManageKeywordPacks.cbAdultKeywords.isChecked
                     )
-                    commit() // Save changes immediately
+                    commit() 
                 }
 
-                // Send broadcast to refresh the KeywordBlockerService
                 sendRefreshRequest(KeywordBlockerService.INTENT_ACTION_REFRESH_BLOCKED_KEYWORD_LIST)
             }
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->

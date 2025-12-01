@@ -122,7 +122,6 @@ class AllAppsUsageFragment : Fragment() {
             val popupMenu = PopupMenu(requireContext(), binding.openMenu)
             popupMenu.menuInflater.inflate(R.menu.usage_tracker_options, popupMenu.menu)
 
-            // Handle menu item clicks
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.select_ignored -> {
@@ -224,10 +223,9 @@ class AllAppsUsageFragment : Fragment() {
             0, System.currentTimeMillis()
         )
 
-        // Calculate earliest available date
         earliestDate = stats.minOfOrNull { it.firstTimeStamp } ?: System.currentTimeMillis()
         currentDate = System.currentTimeMillis()
-        selectedDate = currentDate.coerceAtLeast(earliestDate) // Ensure valid range
+        selectedDate = currentDate.coerceAtLeast(earliestDate) 
 
     }
     override fun onResume() {
@@ -320,7 +318,6 @@ class AllAppsUsageFragment : Fragment() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
 
-        // Restrict the selectable date range
         datePicker.datePicker.minDate = startDate
         datePicker.datePicker.maxDate = endDate
         datePicker.show()
@@ -348,25 +345,20 @@ class AllAppsUsageFragment : Fragment() {
         }
         val pieDataSet = PieDataSet(entries, "").apply {
             colors = listOf(
-                // Material Blue 500
+
                 Color.parseColor("#2196F3"),
 
-                // Material Red 500
                 Color.parseColor("#F44336"),
 
-                // Material Green 500
                 Color.parseColor("#4CAF50"),
 
-                // Material Yellow 500
                 requireContext().getColor(R.color.md_theme_inverseSurface)
             )
 
-            // Add spacing between slices
             sliceSpace = 3f
 
             setDrawValues(false)
 
-            // Increase selection shift
             selectionShift = 10f
 
             setGradientColor(
@@ -390,25 +382,22 @@ class AllAppsUsageFragment : Fragment() {
             description.isEnabled = false
             isRotationEnabled = true
 
-            // Center hole styling
             isDrawHoleEnabled = true
             holeRadius = 85f
-            transparentCircleRadius = 0f  // Remove transparent circle
+            transparentCircleRadius = 0f  
             setHoleColor(MaterialColors.getColor(context, com.google.android.material.R.attr.colorSurface, Color.WHITE))
 
             legend.isEnabled = false
 
-            // External labels styling
-            setDrawEntryLabels(true)  // Disable internal labels
+            setDrawEntryLabels(true)  
             animateY(1200, Easing.EaseInOutQuart)
 
-            //Todo: Add external labels
             invalidate()
         }
     }
 
     private fun resizeIcon(icon: Drawable, width: Int, height: Int): Drawable {
-        // Convert Drawable to Bitmap
+
         val bitmap = if (icon is BitmapDrawable) {
             icon.bitmap
         } else {
@@ -423,12 +412,10 @@ class AllAppsUsageFragment : Fragment() {
             bitmap
         }
 
-        // Calculate the target size in pixels (assuming density is needed)
         val density = Resources.getSystem().displayMetrics.density
         val targetWidth = (width * density).toInt()
         val targetHeight = (height * density).toInt()
 
-        // Create scaled bitmap
         val scaledBitmap = Bitmap.createScaledBitmap(
             bitmap,
             targetWidth,
@@ -436,7 +423,6 @@ class AllAppsUsageFragment : Fragment() {
             true
         )
 
-        // Convert back to Drawable
         return BitmapDrawable(Resources.getSystem(), scaledBitmap)
     }
 
@@ -479,7 +465,6 @@ class AllAppsUsageFragment : Fragment() {
                 true
             }
 
-            // Load app icon and label on the main thread
             binding.appIcon.setImageDrawable(appInfo.loadIcon(packageManager))
             binding.appName.text = appInfo.loadLabel(packageManager)
             binding.appUsage.text = TimeTools.formatTime(stats.totalTime)

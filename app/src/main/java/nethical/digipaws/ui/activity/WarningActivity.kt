@@ -116,7 +116,7 @@ class WarningActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         proceedTimer?.onFinish()
-        dialog?.dismiss()  // Ensure dialog is dismissed before activity is destroyed
+        dialog?.dismiss()  
 
     }
 

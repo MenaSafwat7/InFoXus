@@ -27,7 +27,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
                 displayUrlBarId = "url_bar",
                 browserSugggestionBoxId = "omnibox_suggestions_dropdown"
             ),
-            // Todo; Fix firefox redirector not working because fails to access the edittext
+
             "org.mozilla.firefox" to BrowserUrlBarInfo(
                 displayUrlBarId = "mozac_browser_toolbar_url_view",
                 browserSugggestionBoxId = "sfcnt",
@@ -49,7 +49,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
     var recursionResultNodes: MutableList<AccessibilityNodeInfo> = mutableListOf()
 
     private fun containsBlockedKeyword(url: String): String? {
-        // Split text by whitespace to get individual words and check each word
+
         val keywords = parseTextForKeywords(url)
         keywords.forEach { word ->
             if (blockedKeyword.contains(word.lowercase())) {
@@ -60,7 +60,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
     }
 
     private fun parseTextForKeywords(input: String): Set<String> {
-        // Basic word extraction for any text
+
         fun extractWords(text: String): Set<String> {
             return text.split(Regex("[^a-zA-Z0-9]+"))
                 .filter { it.isNotEmpty() }
@@ -68,18 +68,15 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
                 .toSet()
         }
 
-        // Simple URL pattern
         val urlPattern = "([\\w-]+\\.)+[\\w-]+(/[^?#]*)?\\??([^#]*)?"
 
-        // First check if it matches URL pattern
         val regex = Regex(urlPattern)
         val words = mutableSetOf<String>()
 
         if (regex.find(input) != null) {
-            // Handle as URL
+
             words.addAll(extractWords(input))
 
-            // Extract query parameters specifically
             regex.find(input)?.groups?.get(3)?.value?.let { queryParams ->
                 queryParams.split('&').forEach { param ->
                     if ('=' in param) {
@@ -90,7 +87,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
                 }
             }
         } else {
-            // Handle as plain text
+
             words.addAll(extractWords(input))
         }
 
@@ -113,7 +110,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
 
             try {
                 recursionResultNodes.forEach { node ->
-                    // Guard against null text
+
                     val nodeText = node.text?.toString() ?: ""
                     if (nodeText.isEmpty()) return@forEach
                     val word = containsBlockedKeyword(nodeText)
@@ -126,10 +123,10 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
                 Log.d("Keyword Blocker 111", e.toString())
             }
         }
-        // Check if the package name exists in the map
+
         val urlBarInfo = URL_BAR_ID_LIST[event.packageName]
         if (urlBarInfo == null && detectedAdultKeyword != null) {
-            // App is not a supported browser and adult word was found so hence press home
+
             return KeywordBlockerResult(true, detectedAdultKeyword)
         }
 
@@ -139,7 +136,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
             ViewBlocker.findElementById(rootNode, idPrefixPart + urlBarInfo.displayUrlBarId)
 
         if (detectedAdultKeyword == null) {
-            // Safely handle possible nulls from searchKeywordsInWebViewTitle and displayUrlTextNode.text
+
             val webViewKeyword = searchKeywordsInWebViewTitle(rootNode)
             val displayText = displayUrlTextNode?.text?.toString() ?: ""
             detectedAdultKeyword = webViewKeyword ?: (if (displayText.isNotEmpty()) containsBlockedKeyword(displayText) else null) ?: return KeywordBlockerResult()
@@ -190,7 +187,6 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
 
         Log.d("Keyword Blocker", "Webview title $resultWord")
 
-        // Guard against null text on webview
         val titleText = resultWord?.toString() ?: ""
         if (titleText.isEmpty()) return null
 
@@ -217,33 +213,27 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
     }
 
     fun performSmallUpwardScroll() {
-        // Create a path for the gesture
+
         val path = Path()
 
-        // Screen dimensions (you may want to get these dynamically)
         val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 
-        // Start point: bottom quarter of screen
         val startY = (screenHeight * 0.75).toFloat()
-        // End point: slightly above start point (small scroll)
+
         val endY = startY - (screenHeight * 0.1).toFloat()
 
-        // Center horizontally
         val centerX = Resources.getSystem().displayMetrics.widthPixels / 2f
 
-        // Define the gesture path
         path.moveTo(centerX, startY)
         path.lineTo(centerX, endY)
 
-        // Create gesture builder
         val gestureBuilder = GestureDescription.Builder()
         val gestureStroke = GestureDescription.StrokeDescription(
             path,
-            0, // start time
-            200 // duration in milliseconds
+            0, 
+            200 
         )
 
-        // Build and dispatch gesture
         val gesture = gestureBuilder
             .addStroke(gestureStroke)
             .build()
@@ -251,7 +241,7 @@ class KeywordBlocker(val service: AccessibilityService) : BaseBlocker() {
         service.dispatchGesture(gesture, object : AccessibilityService.GestureResultCallback() {
             override fun onCompleted(gestureDescription: GestureDescription?) {
                 super.onCompleted(gestureDescription)
-                // Handle completion if needed
+
             }
 
             override fun onCancelled(gestureDescription: GestureDescription?) {

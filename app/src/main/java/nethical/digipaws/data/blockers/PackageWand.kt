@@ -144,7 +144,7 @@ class PackageWand {
             "com.simplemobiletools.contactspro"
         )
         val PRODUCTIVE_APPS = hashSetOf(
-            // Note-Taking & Writing
+
             "com.evernote",
             "com.google.android.keep",
             "com.notion.mobile",
@@ -152,7 +152,6 @@ class PackageWand {
             "com.jotterpad.x",
             "com.writeapp.write",
 
-            // Task Management & To-Do
             "com.todoist",
             "com.microsoft.todos",
             "any.do",
@@ -161,7 +160,6 @@ class PackageWand {
             "com.trello",
             "com.basecamp.bc3",
 
-            // Productivity Suites
             "com.microsoft.office.word",
             "com.microsoft.office.excel",
             "com.microsoft.office.powerpoint",
@@ -169,14 +167,12 @@ class PackageWand {
             "com.google.android.apps.docs.editors.sheets",
             "com.google.android.apps.docs.editors.slides",
 
-            // Calendar & Time Management
             "com.google.android.calendar",
             "com.samsung.android.calendar",
             "com.microsoft.exchange.sync",
             "com.calendly.mobile",
             "com.app.timepage",
 
-            // Communication & Collaboration
             "com.slack",
             "com.microsoft.teams",
             "com.zoom.videomeetings",
@@ -184,58 +180,48 @@ class PackageWand {
             "com.cisco.webex.meetings",
             "com.google.android.apps.meet",
 
-            // Cloud Storage & File Management
             "com.google.android.apps.docs",
             "com.dropbox.android",
             "com.box.android",
             "com.microsoft.skydrive",
             "com.synchronoss.dcs.drive",
 
-            // Learning & Skill Development
             "com.duolingo",
             "org.khanacademy.android",
             "com.linkedin.learning",
             "com.skillshare.app",
 
-            // Focus & Meditation
             "com.headspace.android",
             "com.calm.meditation",
             "com.spectratech.insight",
 
-            // Finance & Expense Tracking
             "com.mint",
             "com.quickbooks.android",
             "com.expensify.chat",
             "com.personalcapital.activities",
 
-            // Project Management
             "io.clickup.android",
             "com.asana.app",
             "com.proofhub.mobile",
             "works.shift.app",
 
-            // Writing & Content Creation
             "com.grammarly.android",
             "com.bandlab.bandlab",
             "com.adobe.spark",
             "com.canva.editor",
 
-            // Habit Tracking
             "io.habitica",
             "com.coach.me",
             "com.flourish.habits",
 
-            // Reading & Research
             "com.instapaper.android",
             "com.goodreads",
             "com.pocket.android",
 
-            // Password Management
             "com.lastpass.lpandroid",
             "com.dashlane",
             "com.bitwarden",
 
-            // Other Specialized Productivity Tools
             "com.notion.mobile",
             "com.zhiliaoapp.musically",
             "com.google.android.keep",

@@ -15,7 +15,7 @@ class WelcomeFragment : Fragment() {
     }
 
     private var _binding: FragmentWelcomeBinding? = null
-    private val binding get() = _binding!!  // Safe getter for binding
+    private val binding get() = _binding!!  
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +34,7 @@ class WelcomeFragment : Fragment() {
                 .replace(
                     R.id.fragment_holder,
                     PermissionsFragment()
-                ) // Replace with FragmentB
+                ) 
                 .addToBackStack(null)
                 .commit()
         }
