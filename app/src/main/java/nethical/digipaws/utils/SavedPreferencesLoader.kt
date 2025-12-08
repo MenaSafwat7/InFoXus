@@ -65,7 +65,7 @@ class SavedPreferencesLoader(private val context: Context) {
         val json = gson.toJson(cheatHoursList)
 
         editor.putString("cheatHoursList", json)
-        editor.apply()
+        editor.commit()
     }
 
     fun loadAppBlockerCheatHoursList(): MutableList<TimedActionActivity.AutoTimedActionItem> {
@@ -90,7 +90,7 @@ class SavedPreferencesLoader(private val context: Context) {
         val json = gson.toJson(cheatHoursList)
 
         editor.putString("auto_focus_list", json)
-        editor.apply()
+        editor.commit()
     }
 
     fun loadAutoFocusHoursList(): MutableList<TimedActionActivity.AutoTimedActionItem> {

@@ -58,7 +58,7 @@ class LocationPreferencesManager(private val context: Context) {
 
     private fun saveLocations(locations: List<SavedLocation>) {
         val json = gson.toJson(locations)
-        prefs.edit().putString(KEY_LOCATIONS, json).apply()
+        prefs.edit().putString(KEY_LOCATIONS, json).commit()
     }
 
     fun getConfig(): LocationBlockerConfig {
@@ -82,7 +82,7 @@ class LocationPreferencesManager(private val context: Context) {
             putBoolean(KEY_USE_HIGH_ACCURACY, config.useHighAccuracy)
             putBoolean(KEY_GEOFENCING_ENABLED, config.geofencingEnabled)
             putInt(KEY_UPDATE_INTERVAL, config.updateIntervalMinutes)
-            apply()
+            commit()
         }
         saveLocations(config.locations)
     }
