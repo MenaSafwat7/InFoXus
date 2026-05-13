@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">InFoXus</string>
-    <string name="launcher_options">Launcher Options</string>
     <string name="focus_mode">Focus Mode</string>
     <string name="app_blocker">App Blocker</string>
     <string name="view_reel_blocker">View/Reel Blocker</string>
-    <string name="keyword_blocker">Keyword Blocker (BETA)</string>
+    <string name="keyword_blocker">Keyword Blocker</string>
     <string name="anti_uninstall">Anti Uninstall</string>
     <string name="usage_tracker">Usage Tracker (BETA)</string>
     <string name="disabled">Disabled</string>
-    <string name="select_pinned_apps">Select pinned apps</string>
-    <string name="warning_launcher_settings">Set InFoXus as the default launcher to access this option</string>
     <string name="select_blocked_apps">Select blocked apps</string>
     <string name="start_focus_mode">Start focus mode</string>
     <string name="warning_general_settings">Enable General Accessibility Service to access this option</string>
@@ -20,8 +17,7 @@
     <string name="add_custom_keywords">Add Custom Keywords</string>
     <string name="manage_keyword_packs">Manage Keyword Packs</string>
     <string name="warning_keywords_settings">Enable Keyword Blocker Accessibility Service to manage blocked keywords</string>
-    <string name="grayscale_filter">Grayscale Filter</string>
-    <string name="setup_filter">Setup Filter</string>">
+    <string name="setup_filter">Setup Filter</string>
     <string name="usage_stats">Usage Stats</string>
     <string name="manage_overlay_trackers">Manage Real Time Overlay</string>
     <string name="warning_usage_tracker_settings">Enable Usage Tracker Accessibility Service to manage trackers</string>
@@ -90,6 +86,15 @@
     <string name="accessibility_permission_keyword_blocker">"         Enabling this would unlock the following in InFoXus: 1. Block custom keywords 2. Block content like adult material           InFoXus needs access to accessibility data to know when you open a specific feature within an app, like a social media feed or a game.         This lets InFoXus block those features for you based on your preferences, helping you stay focused and reduce screen distractions.           Rest assured, all accessibility data stays securely on your device—we never share or transmit your data, ensuring your privacy is always protected.                "</string>
 
     <string name="accessibility_permission_general_features">"         Enabling this would unlock the following in InFoXus: 1. Anti-Uninstall (Setup required to run)           InFoXus needs access to accessibility data to know when you open a specific feature within an app, like a social media feed or a game.         This lets InFoXus block those features for you based on your preferences, helping you stay focused and reduce screen distractions.           Rest assured, all accessibility data stays securely on your device—we never share or transmit your data, ensuring your privacy is always protected.                "</string>
+    <string name="accessibility_permission_main">
+        InFoXus needs access to accessibility data to provide core features like:\n
+        1. App Blocking &amp; Focus Mode\n
+        2. Content &amp; Site Blocker\n
+        3. Real-time Usage Tracking\n
+        4. Anti-Uninstall Protection\n\n
+        This allows InFoXus to monitor app activity and help you stay focused by blocking distractions based on your settings.\n\n
+        Rest assured, all data stays securely on your device—we never share or transmit your data, ensuring your privacy is strictly protected.
+    </string>
     <string name="admin_permission_desc">InFoXus Anti-Uninstall</string>
     <string name="title">Title</string>
     <string name="close">Close</string>
@@ -108,8 +113,8 @@
     <string name="retry">Retry</string>
     <string name="start_time">Start Time: %1$d:%2$d</string>
     <string name="end_time_must_be_after_start_time_has_passed">End time must be after start time has passed!</string>
-    <string name="end_time">End Time: %02d:%02d</string>
-    <string name="start_time_02d_02d">Start Time: %02d:%02d</string>
+    <string name="end_time">End Time: %1$02d:%2$02d</string>
+    <string name="start_time_02d_02d">Start Time: %1$02d:%2$02d</string>
     <string name="specify_cheat_hours">Specify Cheat Hours</string>
     <string name="remaining_time_anti_uninstall">You still have %1$d days to go before unlocking anti-uninstall</string>
     <string name="add_a_new_keyword">Add a new keyword</string>
@@ -139,7 +144,7 @@
     <string name="fix_your_life">Fix your life</string>
     <string name="perform_actions_like_a_back_press">Perform actions like a back press</string>
     <string name="read_content_on_screen">Read content on screen</string>
-    <string name="this_will_allow_digipaws_to">This will allow InFoXus to:</string>
+    <string name="this_will_allow_infoxus_to">This will allow InFoXus to:</string>
     <string name="enable_2">"Enable %1$s"</string>
     <string name="device_admin_perm">InFoXus uses Device Admin permission to enhance security and block uninstalling InFoXus until a specific period. All data remains securely stored on your device and is never shared externally.</string>
     <string name="prevent_uninstallation_attempts_until_a_set_condition_is_met">Prevent uninstallation attempts until a set condition is met</string>
@@ -149,11 +154,15 @@
     <string name="calculate_how_many_reels_tiktok_short_videos_you_scroll_per_day">Calculate how many reels/ tiktok/ short videos you scroll per day</string>
     <string name="plan_a_robbery">Plan a robbery</string>
     <string name="please_provide_display_over_other_apps_permission_to_access_this_feature">Please provide display over other apps permission to access this feature</string>
-    <string name="find_digipaws_and_press_enable">Find InFoXus and press enable</string>
+    <string name="find_infoxus_and_press_enable">Find InFoXus and press enable</string>
     <string name="discard_changes">Discard Changes?</string>
     <string name="are_you_sure_you_want_to_discard_all_changes_and_exit">Are you sure you want to discard all changes and exit?</string>
     <string name="yes">Yes</string>
     <string name="join_discord">Join Discord</string>
+    <string name="support_our_work">Support our Work</string>
+    <string name="donate_via_paypal">Donate via PayPal</string>
+    <string name="donate_via_instapay">Donate via InstaPay</string>
+    <string name="donation_desc">Your support helps keep the project alive and free for everyone.</string>
     <string name="follow_us_on_instagram">Follow us on Instagram</string>
     <string name="support">Support</string>
     <string name="if_you_enable_this_you_won_t_be_able_to_change_configurations_such_as_adding_blocked_apps_keywords_and_more">If you enable this, you won\'t be able to change configurations such as adding blocked apps, keywords, and more until you remove anti-uninstall. Your existing changes will be used for the entire period.</string>
@@ -172,5 +181,12 @@
     <string name="join_telegram">Join Telegram</string>
     <string name="guide">Guide</string>
     <string name="go_back">Go back</string>
-    <string name="welcome_attribution">Based on DigiPaws • Licensed under GPL v3</string>
+    <string name="welcome_attribution"></string>
+    <string name="block_sites">Block Sites</string>
+    <string name="add_blocked_sites">Add Blocked Sites</string>
+    <string name="add_a_new_site">Add a new site</string>
+    <string name="site_domain_e_g_facebook_com">Site domain (e.g., facebook.com)</string>
+    <string name="block_adult_sites">Block Adult Sites</string>
+    <string name="block_thousands_of_porn_sites_using_our_database">Block 90,000+ porn sites using our database</string>
+    <string name="security_marker">hn5eb wla eh 🙄</string>
 </resources>

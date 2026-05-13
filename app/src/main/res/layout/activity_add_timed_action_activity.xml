@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_dark"
     tools:context=".ui.activity.TimedActionActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -24,5 +25,7 @@
         android:src="@drawable/baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:backgroundTint="@color/lavender_primary"
+        app:tint="@color/bg_dark"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

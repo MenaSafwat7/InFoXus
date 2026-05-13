@@ -16,3 +16,9 @@ local.properties
 *.apk
 *.aab
 app/full/release/
+.agent/
+*.txt
+*.py
+*.png
+*.idsig
+debug.keystore

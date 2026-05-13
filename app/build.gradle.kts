@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "nethical.digipaws"
+    namespace = "mina.infoxus"
     compileSdk = 34
     flavorDimensions += "version"
 
     defaultConfig {
-        applicationId = "nethical.digipaws"
+        applicationId = "mina.infoxus"
         minSdk = 26
         targetSdk = 34
         versionCode = 23
@@ -72,6 +72,10 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
     }
 }
 

@@ -1,7 +1,5 @@
 [versions]
 agp = "8.7.2"
-anychartAndroid = "1.1.5"
-api = "13.1.5"
 gson = "2.11.0"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
@@ -19,8 +17,6 @@ playServicesMaps = "18.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-anychart-android = { module = "com.github.AnyChart:AnyChart-Android", version.ref = "anychartAndroid" }
-api = { module = "dev.rikka.shizuku:api", version.ref = "api" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -30,7 +26,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 mpandroidchart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpandroidchart" }
-provider = { module = "dev.rikka.shizuku:provider", version.ref = "api" }
 timerangepicker = { module = "nl.joery.timerangepicker:timerangepicker", version.ref = "timerangepicker" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }

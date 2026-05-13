@@ -1,5 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Original Midnight Navy Palette (Dark Mode) -->
+    <color name="bg_dark">#0B0E14</color>
+    <color name="card_dark">#161B26</color>
+    <color name="lavender_accent">#A4AEFF</color>
+    <color name="lavender_primary">#8A94FF</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#94A3B8</color>
+    
+    <color name="chip_enabled_bg">#102A24</color>
+    <color name="chip_enabled_text">#4ADE80</color>
+    <color name="chip_disabled_bg">#2A1014</color>
+    <color name="chip_disabled_text">#F87171</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="error_color">#F87171</color>
+    <color name="text_color">#FFFFFF</color>
 
     <color name="md_theme_primary">#83D5C5</color>
     <color name="md_theme_onPrimary">#003730</color>
@@ -145,5 +161,4 @@
 
 
 
-    <color name="text_color">#FFFFFF</color>
 </resources>

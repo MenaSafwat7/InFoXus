@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_dark"
     android:layout_gravity="center">
 
     <LinearLayout
@@ -128,8 +129,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp">
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,11 +162,16 @@
         <Button
             android:id="@+id/share_stats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
             android:text="Share your Stats"
-            app:icon="@drawable/baseline_share_24" />
+            android:textAllCaps="false"
+            android:textColor="@color/bg_dark"
+            app:backgroundTint="@color/lavender_primary"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/baseline_share_24"
+            app:iconTint="@color/bg_dark" />
 
 
     </LinearLayout>

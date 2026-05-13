@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">دیجی‌پاز</string>
-    <string name="launcher_options">گزینه‌های لانچر</string>
+    <string name="app_name" translatable="false">InFoXus</string>
     <string name="focus_mode">حالت تمرکز</string>
     <string name="app_blocker">مسدودکننده برنامه</string>
     <string name="view_reel_blocker">مسدودکننده ویو/ریلز</string>
@@ -8,8 +7,6 @@
     <string name="anti_uninstall">ضد پاک‌شدن</string>
     <string name="usage_tracker">ردیاب بهره‌وری</string>
     <string name="disabled">غیرفعال</string>
-    <string name="select_pinned_apps">انتخاب برنامه‌های سنجاق شده</string>
-    <string name="warning_launcher_settings">برای دسترسی به این گزینه، دیجی‌پاز را به عنوان لانچر پیش‌فرض تنظیم کنید</string>
     <string name="start_focus_mode">آغاز حالت تمرکز</string>
     <string name="warning_general_settings">برای دسترسی به این گزینه، اجازه دسترسی‌پذیری عمومی را فعال کنید</string>
     <string name="select_blocked_apps">انتخاب برنامه‌های مسدود شده</string>
@@ -117,8 +114,8 @@
     <string name="retry">تلاش مجدد</string>
     <string name="start_time">زمان آغاز: %1$d:%2$d</string>
     <string name="end_time_must_be_after_start_time_has_passed">زمان پایان باید بعد از زمان آغاز گذشته باشد!</string>
-    <string name="end_time">زمان پایان: %02d:%02d</string>
-    <string name="start_time_02d_02d">زمان آغاز: %02d:%02d</string>
+    <string name="end_time">زمان پایان: %1$02d:%2$02d</string>
+    <string name="start_time_02d_02d">زمان آغاز: %1$02d:%2$02d</string>
     <string name="specify_cheat_hours">مشخص کردن ساعت‌های تقلب</string>
     <string name="remaining_time_anti_uninstall">شما هنوز %1$d روز تا باز کردن ضد پاک‌شدن دارید</string>
     <string name="add_a_new_keyword">افزودن یک واژه کلیدی جدید</string>
@@ -147,7 +144,7 @@
     <string name="fix_your_life">زندگی خود را درست کنید</string>
     <string name="perform_actions_like_a_back_press">انجام اقداماتی مانند فشار دادن دکمه بازگشت</string>
     <string name="read_content_on_screen">خواندن محتوا روی صفحه</string>
-    <string name="this_will_allow_digipaws_to">این به دیجی‌پاز اجازه می‌دهد تا:</string>
+    <string name="this_will_allow_infoxus_to">این به دیجی‌پاز اجازه می‌دهد تا:</string>
     <string name="enable_2">"فعال کردن %1$s"</string>
     <string name="device_admin_perm">دیجی‌پاز از مجوز مدیریت دستگاه برای افزایش امنیت و مسدود کردن پاک‌شدن دیجی‌پاز تا یک دوره مشخص استفاده می‌کند. تمام داده‌ها به‌طور ایمن روی دستگاه شما ذخیره می‌شوند و هرگز به‌صورت خارجی به اشتراک گذاشته نمی‌شوند.</string>
     <string name="prevent_uninstallation_attempts_until_a_set_condition_is_met">جلوگیری از تلاش‌های پاک‌شدن تا زمانی که یک شرط مشخص برآورده شود</string>
@@ -157,5 +154,5 @@
     <string name="calculate_how_many_reels_tiktok_short_videos_you_scroll_per_day">محاسبه تعداد ریل‌ها/تیک‌تاک/ویدیوهای کوتاه که در روز پیمایش می‌کنید</string>
     <string name="plan_a_robbery">برنامه‌ریزی یک سرقت</string>
     <string name="please_provide_display_over_other_apps_permission_to_access_this_feature">لطفاً مجوز نمایش روی سایر برنامه‌ها را برای دسترسی به این ویژگی فراهم کنید</string>
-    <string name="find_digipaws_and_press_enable">دیجی‌پاز را پیدا کنید و روی فعال‌سازی فشار دهید</string>
+    <string name="find_infoxus_and_press_enable">دیجی‌پاز را پیدا کنید و روی فعال‌سازی فشار دهید</string>
 </resources>

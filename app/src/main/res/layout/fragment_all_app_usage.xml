@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,6 +19,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:icon="@drawable/baseline_edit_24"
+            app:iconTint="@color/bg_dark"
+            app:backgroundTint="@color/lavender_primary"
             app:layout_constraintEnd_toStartOf="@+id/select_date"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +31,9 @@
             android:layout_height="48dp"
             android:text="Select date"
             app:icon="@drawable/baseline_date_range_24"
+            app:iconTint="@color/bg_dark"
+            android:textColor="@color/bg_dark"
+            app:backgroundTint="@color/lavender_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,6 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Screentime"
             android:alpha="0.7"
+            android:textColor="@color/text_secondary"
             android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
             app:layout_constraintBottom_toTopOf="@+id/total_usage"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1 hr, 22 min"
+            android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
             app:layout_constraintBottom_toBottomOf="@+id/pieChart"
             app:layout_constraintEnd_toEndOf="parent"

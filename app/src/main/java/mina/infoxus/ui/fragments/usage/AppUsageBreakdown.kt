@@ -1,0 +1,168 @@
+package mina.infoxus.ui.fragments.usage
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.color.MaterialColors
+import mina.infoxus.R
+import mina.infoxus.databinding.FragmentAppUsageBreakdownBinding
+import mina.infoxus.utils.TimeTools
+
+class AppUsageBreakdown(private val stat: AllAppsUsageFragment.Stat) : Fragment() {
+
+    private lateinit var binding: FragmentAppUsageBreakdownBinding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+        binding = FragmentAppUsageBreakdownBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupLineChart(binding.lineChart)
+        plotUsageData()
+
+        try {
+            val appInfo = requireContext().packageManager.getApplicationInfo(stat.packageName, 0)
+            binding.appName.text = appInfo.loadLabel(requireContext().packageManager)
+
+            binding.appIcon.setImageDrawable(appInfo.loadIcon(requireContext().packageManager))
+        } catch (_: Exception) {
+        }
+        binding.screentime.text = TimeTools.formatTime(stat.totalTime, false)
+        binding.sessions.text = stat.startTimes.size.toString()
+    }
+
+    private fun setupLineChart(lineChart: LineChart) {
+        lineChart.apply {
+            description.isEnabled = false
+            legend.isEnabled = true
+
+            setTouchEnabled(true)
+            setPinchZoom(true)
+
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                granularity = 1f
+                labelRotationAngle = 45f
+                valueFormatter = HourAxisFormatter()
+            }
+
+            axisLeft.apply {
+                valueFormatter = MinutesAxisFormatter()
+                axisMinimum = 0f
+            }
+            axisRight.isEnabled = false
+
+            animateX(1000)
+        }
+    }
+
+    private fun plotUsageData() {
+
+        val hourlyUsage = MutableList(24) { 0L }
+
+        stat.startTimes.forEach { startTime ->
+            val hour = startTime.hour
+
+            hourlyUsage[hour] = hourlyUsage[hour] + (stat.totalTime / (1000 * 60))
+        }
+
+        val entries = hourlyUsage.mapIndexed { hour, minutes ->
+            Entry(hour.toFloat(), minutes.toFloat())
+        }
+
+        val dataSet = LineDataSet(entries, "Usage (minutes)")
+
+        setupChartUI(binding.lineChart,dataSet)
+    }
+
+    private fun setupChartUI(
+        chart: LineChart,
+        lineDataSet: LineDataSet
+    ) {
+
+        val primaryColor = MaterialColors.getColor(
+            requireContext(), com.google.android.material.R.attr.colorPrimary, ContextCompat.getColor(
+                requireContext(),
+                R.color.text_color
+            )
+        )
+        lineDataSet.apply {
+            color = primaryColor
+            valueTextColor = primaryColor
+            lineWidth = 3f
+            setDrawCircles(false)
+
+            setDrawValues(false)
+
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+            cubicIntensity = 0.2f
+        }
+
+        chart.xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            granularity = 1f
+            labelCount = 5
+            setDrawGridLines(false) 
+            textColor = primaryColor
+        }
+
+        chart.axisLeft.apply {
+            isEnabled = false
+            setDrawGridLines(false)
+            textColor = primaryColor
+        }
+
+        chart.apply {
+            axisRight.isEnabled = false
+            legend.isEnabled = false
+            description.isEnabled = false
+            animateY(800, Easing.EaseInCubic)
+
+            setTouchEnabled(true)
+            isDragEnabled = true
+            setScaleEnabled(true)
+
+            setPinchZoom(false)
+
+            data = LineData(lineDataSet)
+
+        }
+        chart.invalidate()
+    }
+
+    private class HourAxisFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            val hour = value.toInt()
+            return String.format("%02d:00", hour)
+        }
+    }
+
+    private class MinutesAxisFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            return "${value.toInt()} min"
+        }
+    }
+
+    private class MinutesValueFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            if (value == 0f) return ""
+            return "${value.toInt()}m"
+        }
+    }
+}

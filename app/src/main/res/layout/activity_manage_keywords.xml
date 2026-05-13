@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_dark"
     android:padding="8dp"
     tools:context=".ui.activity.ManageKeywordsActivity">
 
@@ -26,6 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
         android:clickable="true"
+        android:textColor="@color/bg_dark"
+        app:backgroundTint="@color/lavender_primary"
+        app:iconTint="@color/bg_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/save"

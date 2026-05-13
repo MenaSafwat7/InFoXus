@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollview"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
 
     <LinearLayout
     android:layout_width="match_parent"
@@ -20,6 +21,7 @@
         android:layout_gravity="center"
         android:padding="8dp"
         android:text="@string/specify_cheat_hours"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -57,6 +59,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="6:30"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
 
@@ -66,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="4dp"
+                android:textColor="@color/white"
                 android:text="@string/to" />
 
             <TextView
@@ -75,6 +79,7 @@
                 android:gravity="center"
                 android:padding="4dp"
                 android:text="22:00"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
@@ -83,30 +88,36 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:hintTextColor="@color/lavender_accent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cheat_hour_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/title"
+            android:textColor="@color/white"
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_select_end_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:text="@string/select_end_time"
+        android:textColor="@color/bg_dark"
+        app:backgroundTint="@color/lavender_primary"
         android:visibility="gone" />
 
         <Button
         android:id="@+id/btn_select_unblocked_apps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/select_apps_to_unblock" />
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/select_apps_to_unblock"
+        android:textColor="@color/bg_dark"
+        app:backgroundTint="@color/lavender_primary" />
 
 </LinearLayout>
 </ScrollView>

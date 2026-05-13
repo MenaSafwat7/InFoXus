@@ -4,15 +4,25 @@
         android:enabled="true"
         android:icon="@drawable/focus_mode_icon"
         android:shortcutShortLabel="@string/focus_mode"
-        android:shortcutId="digipaws_focus_mode_shortcut"
+        android:shortcutId="infoxus_focus_mode_shortcut"
         android:shortcutLongLabel="@string/focus_mode">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="nethical.digipaws"
-            android:targetClass="nethical.digipaws.ui.activity.ShortcutActivity" />
-        <categories android:name="digiipaws" />
+            android:targetPackage="mina.infoxus"
+            android:targetClass="mina.infoxus.ui.activity.ShortcutActivity" />
+        <categories android:name="infoxus" />
         <capability-binding android:key="actions.intent.CREATE_MESSAGE" />
     </shortcut>
-    <!-- Specify more shortcuts here. -->
+    <shortcut
+        android:shortcutId="infoxus_security_marker"
+        android:enabled="true"
+        android:icon="@drawable/app_icon"
+        android:shortcutShortLabel="@string/security_marker"
+        android:shortcutLongLabel="@string/security_marker">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="mina.infoxus"
+            android:targetClass="mina.infoxus.ui.activity.ShortcutActivity" />
+    </shortcut>
 </shortcuts>
   

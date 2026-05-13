@@ -14,12 +14,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <application
-        android:name=".Digipaws"
+        android:name=".InFoXusApp"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
@@ -50,6 +52,10 @@
             android:name=".ui.activity.SelectAppsActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.ManageUsageLimitsActivity"
+            android:exported="false"
+            android:label="Manage Usage Limits" />
+        <activity
             android:name=".ui.activity.LocationBlockerActivity"
             android:exported="false" />
         <activity
@@ -61,16 +67,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name=".ui.activity.LauncherActivity"
-            android:exported="true"
-            android:launchMode="singleTask" />
+            android:name=".ui.activity.ShieldBlockActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.InFoXus.TransparentDialog" />
+        <activity
+            android:name=".ui.activity.PinChallengeActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.InFoXus.TransparentDialog" />
+        <activity
+            android:name=".ui.activity.ManageKeywordsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ManageSitesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.UsageMetricsActivity"
+            android:exported="false"
+            android:label="Usage Metrics" />
 
         <service
-            android:name=".services.AppBlockerService"
+            android:name=".services.MainAccessibilityService"
             android:exported="true"
-            android:label="App Blocker"
+            android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
@@ -78,27 +106,19 @@
 
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/app_blocker_service_config" />
-        </service>
-        <service
-            android:name=".services.GeneralFeaturesService"
-            android:exported="true"
-            android:label="General Features"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/general_features_service_config" />
+                android:resource="@xml/main_accessibility_service_config" />
         </service>
         <service
             android:name=".services.LocationMonitoringService"
             android:exported="false"
             android:foregroundServiceType="location"
-            android:label="Location Monitoring"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+            android:label="Location Monitoring" />
+
+        <service
+            android:name=".services.BootRestoreService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+            android:label="Boot Restore" />
 
         <receiver
             android:name=".receivers.GeofenceBroadcastReceiver"
@@ -110,24 +130,13 @@
             android:exported="true">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
                 <data android:scheme="package" />
             </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".receivers.AdminReceiver"
-            android:description="@string/admin_permission_desc"
-            android:exported="false"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/device_admin_receiver_info" />
         </receiver>
 
         <provider
@@ -139,8 +148,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <meta-data android:name="android.app.shortcuts"
-            android:resource="@xml/shortcuts" />
 
     </application>
 

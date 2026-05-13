@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
+                android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
         </LinearLayout>
 
@@ -36,7 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            app:cardElevation="2dp">
+            app:cardBackgroundColor="@color/card_dark"
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -48,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Usage Timeline"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -70,6 +73,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="@color/card_dark"
                 android:layout_weight="1">
 
                 <LinearLayout
@@ -83,6 +87,7 @@
                         android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:text="Today's Screentime"
+                        android:textColor="@color/text_secondary"
                         android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
 
                     <TextView
@@ -90,6 +95,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/white"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -99,6 +105,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                app:cardBackgroundColor="@color/card_dark"
                 android:layout_weight="1">
 
                 <LinearLayout
@@ -112,6 +119,7 @@
                         android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:text="App Opens"
+                        android:textColor="@color/text_secondary"
                         android:textAppearance="@style/TextAppearance.Material3.LabelMedium" />
 
                     <TextView
@@ -119,6 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/white"
                         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -130,6 +139,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/card_dark"
+            app:strokeWidth="0dp"
             android:visibility="gone">
 
             <LinearLayout
@@ -150,6 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add to Blocked Apps"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/TextAppearance.Material3.LabelLarge" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
